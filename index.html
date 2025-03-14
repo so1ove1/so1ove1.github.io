@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolca - Калькулятор булевых функций</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body id="index">
+    <header id="main-header">
+        <div class="container">
+            <a href="#index" class="logo"><span>Boolca</span></a>
+
+            <nav class="desktop-nav">
+                <a href="#index">Главная</a>
+                <a href="#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="#index">Главная</a>
+                <a href="#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Boolca</h1>
+                <p>Интерактивный калькулятор Булевых функций</p>
+                <div class="buttons">
+                    <a href="#tasks" class="btn primary">Выбрать задачу</a>
+                    <a href="" class="btn secondary">О команде</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tasks Section -->
+        <section id="tasks" class="tasks">
+            <div class="container">
+                <h2>Задачи по Булевым функциям</h2>
+
+                <div class="task-grid">
+                    <!-- Task Card 1 -->
+                    <div class="task-card">
+                        <h3>Генерация булевой функции</h3>
+                        <p>На вход — число n, на выход — булева функция от n аргументов.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 2 -->
+                    <div class="task-card">
+                        <h3>Остаточные функции</h3>
+                        <p>На вход — вектор функции, 0 или 1, номер аргумента, на выход — соответствующая остаточная.
+                        </p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 3 -->
+                    <div class="task-card">
+                        <h3>Восстановление вектора</h3>
+                        <p>На вход — два вектора (нулевая и единичная остаточные функции по некоторому аргументу), на
+                            выход — вектор функции.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 4 -->
+                    <div class="task-card">
+                        <h3>Имя функции</h3>
+                        <p>Игра. Узнать имя функции от 2-х аргументов. Система предлагает вектор функции, пользователь
+                            выбирает «имя».</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 5 -->
+                    <div class="task-card">
+                        <h3>Существенные переменные</h3>
+                        <p>Игра. Определите существенные и фиктивные переменные для предложенной булевой функции.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 6 -->
+                    <div class="task-card">
+                        <h3>ДНФ</h3>
+                        <p>Игра. Введите дизъюнктивную нормальную форму для предложенной булевой функции.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 7 -->
+                    <div class="task-card">
+                        <h3>КНФ</h3>
+                        <p>Игра. Введите конъюнктивную нормальную форму для предложенной булевой функции.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 8 -->
+                    <div class="task-card">
+                        <h3>СДНФ</h3>
+                        <p>Пользователь вводит вектор функции. Система строит совершенную дизъюнктивную нормальную
+                            форму.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 9 -->
+                    <div class="task-card">
+                        <h3>СКНФ</h3>
+                        <p>Пользователь вводит вектор функции. Система строит совершенную конъюнктивную нормальную
+                            форму.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 10 -->
+                    <div class="task-card">
+                        <h3>Предполные классы</h3>
+                        <p>Игра. Определите, к каким предполным классам принадлежит предложенная булева функция.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 11 -->
+                    <div class="task-card">
+                        <h3>Полные системы</h3>
+                        <p>Игра. Определите, является ли набор булевых функций полным.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+
+                    <!-- Task Card 12 -->
+                    <div class="task-card">
+                        <h3>Алгоритмы построения ДНФ</h3>
+                        <p>Реализация одного из алгоритмов построения ДНФ.</p>
+                        <a href="#" class="task-btn">Перейти к задаче</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>

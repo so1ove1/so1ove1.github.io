@@ -1,0 +1,284 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  @font-face {
+	font-family: 'Ubuntu Mono'; 
+	src: url(/fonts/ubuntumono.ttf); 
+}
+  
+  :root {
+    --background: #0e1116;
+    --foreground: #f8fafc;
+    --accent: #0ea5e9;
+    --card: #141925;
+    --muted: #94a3b8;
+    --border: #334155;
+  }
+  
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "Ubuntu Mono";
+    line-height: 1.6;
+  }
+  
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Container */
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Header */
+  #main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+  }
+  
+  .header-scrolled {
+    background-color: rgba(14, 17, 22, 0.8);
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  }
+  
+  #main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-weight: bold;
+    font-size: 2.25rem;
+    color: var(--accent);
+  }
+  
+  /* Navigation */
+  .desktop-nav {
+    display: none;
+  }
+  
+  .desktop-nav a {
+    margin-left: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 1.5rem;
+  }
+  
+  .desktop-nav a:hover {
+    background-color: rgba(51, 65, 85, 0.3);
+  }
+  
+  #mobile-menu-toggle {
+    background: none;
+    border: none;
+    color: var(--foreground);
+    cursor: pointer;
+  }
+  
+  #mobile-menu-toggle svg {
+    stroke: var(--foreground);
+    stroke-width: 3;
+  }
+  
+  #mobile-menu {
+    background-color: var(--card);
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+  }
+  
+  #mobile-menu.hidden {
+    display: none;
+  }
+  
+  #mobile-menu nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1.5rem;
+  }
+  
+  #mobile-menu a {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  
+  #mobile-menu a:last-child {
+    border-bottom: none;
+  }
+  
+  /* Hero section */
+  .hero {
+    padding: 6rem 0 3rem;
+    text-align: center;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #38bdf8, #0284c7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+    color: var(--muted);
+    max-width: 700px;
+    margin: 0 auto 2rem;
+  }
+  
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+  }
+  
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+  }
+  
+  .btn.primary {
+    background-color: var(--accent);
+    color: var(--foreground);
+  }
+  
+  .btn.primary:hover {
+    background-color: #0284c7;
+  }
+  
+  .btn.secondary {
+    background-color: rgba(51, 65, 85, 0.5);
+    color: var(--foreground);
+  }
+  
+  .btn.secondary:hover {
+    background-color: rgba(51, 65, 85, 0.8);
+  }
+  
+  /* Tasks section */
+  .tasks {
+    padding: 3rem 0;
+  }
+  
+  .tasks h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .task-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .task-card {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .task-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .task-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+  
+  .task-card p {
+    color: var(--muted);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    min-height: 4rem;
+  }
+  
+  .task-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--accent);
+    color: var(--foreground);
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .task-btn:hover {
+    background-color: #0284c7;
+  }
+  
+  /* Footer */
+  footer {
+    padding: 2rem 0;
+    background-color: var(--card);
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  
+  footer p {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--muted);
+  }
+  
+  /* Media*/
+  @media (min-width: 768px) {
+    .desktop-nav {
+      display: flex;
+    }
+    
+    #mobile-menu-toggle {
+      display: none;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+    }
+    
+    .hero p {
+      font-size: 1.5rem;
+    }
+    
+    .buttons {
+      flex-direction: row;
+    }
+    
+    .task-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .task-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
