@@ -13,22 +13,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Toggle mobile menu
   mobileMenuToggle.addEventListener('click', function () {
-    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle("display");
 
     const menuIcon = mobileMenuToggle.querySelector('svg');
 
-    if (mobileMenu.classList.contains('hidden')) {
-      // Hamburger
-      menuIcon.innerHTML = `
-          <line x1="4" x2="20" y1="12" y2="12"/>
-          <line x1="4" x2="20" y1="6" y2="6"/>
-          <line x1="4" x2="20" y1="18" y2="18"/>
-        `;
-    } else {
+    if (mobileMenu.classList.contains('display')) {
       // X
       menuIcon.innerHTML = `
           <line x1="18" y1="6" x2="6" y2="18" />
           <line x1="6" y1="6" x2="18" y2="18" />
+        `;
+      // Hamburger
+    } else {
+      menuIcon.innerHTML = `
+          <line x1="4" x2="20" y1="12" y2="12"/>
+          <line x1="4" x2="20" y1="6" y2="6"/>
+          <line x1="4" x2="20" y1="18" y2="18"/>
         `;
     }
   });
