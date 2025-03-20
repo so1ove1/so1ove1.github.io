@@ -1,0 +1,179 @@
+.task-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.task-title {
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.task-description {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--foreground);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--foreground);
+    font-family: "Ubuntu Mono";
+    font-size: 1rem;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.input-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.input-row .input-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.btn-calculate {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--accent);
+    color: var(--foreground);
+    border: none;
+    border-radius: 4px;
+    font-family: "Ubuntu Mono";
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-calculate:hover {
+    background-color: #0284c7;
+}
+
+.result-container {
+    margin-top: 2rem;
+    display: none;
+}
+
+.result-title {
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.result-box {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+}
+
+.truth-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.truth-table th,
+.truth-table td {
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.truth-table th {
+    background-color: rgba(51, 65, 85, 0.5);
+}
+
+.truth-table tr:nth-child(even) {
+    background-color: rgba(51, 65, 85, 0.2);
+}
+
+.error-message {
+    color: #ef4444;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+    background-color: rgba(51, 65, 85, 0.3);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tab:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.tab:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.tab.active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.info-box {
+    background-color: rgba(14, 165, 233, 0.1);
+    border-left: 4px solid var(--accent);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+}
+
+.info-box h4 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.vector-display {
+    font-family: "Ubuntu Mono";
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
+}
+
+.vector-highlight {
+    color: var(--accent);
+    font-weight: bold;
+}

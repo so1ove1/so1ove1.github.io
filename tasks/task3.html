@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolca - Восстановление вектора функции</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/task3.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/index.html" class="logo"><span>Boolca</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="binary-background"></div>
+            <div class="container">
+                <h1>Восстановление вектора функции</h1>
+                <p>Задача 3: На вход — два вектора (нулевая и единичная остаточные функции) и номер аргумента, на выход
+                    — вектор функции</p>
+            </div>
+        </section>
+
+        <section class="container" style="padding: 2rem 0 4rem;">
+            <div class="task-container">
+                <h2 class="task-title">Восстановление вектора функции</h2>
+                <p class="task-description">Введите нулевую и единичную остаточные функции по некоторому аргументу и
+                    номер этого аргумента для восстановления исходного вектора функции.</p>
+
+                <div class="info-box">
+                    <h4>Информация</h4>
+                    <p>Остаточные функции — это функции, полученные из исходной функции путем фиксации значения одного
+                        из аргументов. Если у нас есть обе остаточные функции (при аргументе = 0 и при аргументе = 1),
+                        мы можем восстановить исходную функцию.</p>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="input-f0">Нулевая остаточная функция (f₀):</label>
+                        <input type="text" id="input-f0" placeholder="Например: 0110">
+                        <div class="error-message" id="error-f0">Введите корректный вектор (только 0 и 1)</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="input-f1">Единичная остаточная функция (f₁):</label>
+                        <input type="text" id="input-f1" placeholder="Например: 1001">
+                        <div class="error-message" id="error-f1">Введите корректный вектор (только 0 и 1)</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="input-arg">Номер аргумента (начиная с 1):</label>
+                    <input type="number" id="input-arg" min="1" value="1">
+                    <div class="error-message" id="error-arg">Введите корректный номер аргумента</div>
+                </div>
+
+                <button class="btn-calculate" id="calculate-btn">Восстановить вектор</button>
+
+                <div class="result-container" id="result-container">
+                    <h3 class="result-title">Результат:</h3>
+
+                    <div class="tabs">
+                        <div class="tab active" data-tab="vector">Вектор функции</div>
+                        <div class="tab" data-tab="table">Таблица истинности</div>
+                    </div>
+
+                    <div class="tab-content active" id="vector-tab">
+                        <div class="result-box" id="vector-result"></div>
+                    </div>
+
+                    <div class="tab-content" id="table-tab">
+                        <div class="result-box">
+                            <table class="truth-table" id="truth-table"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/js/task3.js"></script>
+    <script src="/js/script.js"></script>
+
+</body>
+
+</html>
