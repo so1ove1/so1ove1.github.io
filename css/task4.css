@@ -1,0 +1,374 @@
+.main-content {
+    padding: 2rem 0 4rem;
+}
+
+.task-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.task-title {
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.task-description {
+    color: var(--muted);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* Info box */
+.info-box {
+    background-color: rgba(14, 165, 233, 0.1);
+    border-left: 4px solid var(--accent);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+}
+
+.info-box h4 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+/* Stats */
+.stat-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.stat.correct {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: var(--correct);
+}
+
+.stat.total {
+    background-color: rgba(51, 65, 85, 0.5);
+    color: var(--foreground);
+}
+
+/* Function display */
+.function-display {
+    margin-bottom: 2rem;
+}
+
+.function-display h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.vector-display {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+#function-vector {
+    font-family: monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5rem;
+    padding: 1rem 2rem;
+    background-color: rgba(51, 65, 85, 0.3);
+    border-radius: 8px;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    margin: 1.5rem 0 1rem;
+    justify-content: center;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+    background-color: rgba(51, 65, 85, 0.3);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tab:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.tab:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.tab.active {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.result-box {
+    background-color: rgba(51, 65, 85, 0.2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Truth table */
+.truth-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.truth-table th,
+.truth-table td {
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.truth-table th {
+    background-color: rgba(51, 65, 85, 0.5);
+}
+
+.truth-table tr:nth-child(even) {
+    background-color: rgba(51, 65, 85, 0.2);
+}
+
+/* Function options */
+.options-title {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.function-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.function-option {
+    padding: 1rem;
+    background-color: rgba(51, 65, 85, 0.3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.function-option:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.function-option.selected {
+    border-color: var(--accent);
+    border-width: 2px;
+    background-color: rgba(14, 165, 233, 0.1);
+}
+
+.function-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.function-code {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+/* Buttons */
+.action-buttons {
+    text-align: center;
+}
+
+.btn-calculate {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--accent);
+    color: var(--foreground);
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-bottom: 1rem;
+}
+
+.btn-calculate:hover {
+    background-color: #0284c7;
+}
+
+.btn-calculate:disabled {
+    background-color: var(--muted);
+    cursor: not-allowed;
+}
+
+.btn-next {
+    margin-top: 1rem;
+}
+
+/* Result */
+#result-container {
+    margin-top: 1.5rem;
+}
+
+#result-message {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+#result-message.correct {
+    color: var(--correct);
+}
+
+#result-message.incorrect {
+    color: var(--error);
+}
+
+.correct-answer {
+    background-color: rgba(51, 65, 85, 0.3);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.function-description, .function-expression {
+    color: var(--muted);
+    margin-bottom: 1rem;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-width: 300px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.toast.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.toast.success {
+    border-left: 4px solid var(--correct);
+}
+
+.toast.error {
+    border-left: 4px solid var(--error);
+}
+
+/* Footer */
+footer {
+    padding: 2rem 0;
+    background-color: var(--card);
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+
+footer p {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--muted);
+}
+
+/* Animations */
+@keyframes gradient-animation {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+    .desktop-nav {
+        display: flex;
+    }
+
+    #mobile-menu-toggle {
+        display: none;
+    }
+
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero p {
+        font-size: 1.5rem;
+    }
+
+    .function-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .task-container {
+        padding: 1.5rem;
+    }
+    
+    #function-vector {
+        font-size: 1.5rem;
+    }
+    
+    .stat-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
