@@ -1,0 +1,160 @@
+.task-container {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.task-title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+.task-description {
+    color: var(--muted);
+    margin-bottom: 2rem;
+}
+
+.info-box {
+    background-color: rgba(14, 165, 233, 0.1);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.info-box h4 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .input-row {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--muted);
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--foreground);
+    font-family: "Ubuntu Mono";
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+.btn-calculate {
+    background-color: var(--accent);
+    color: var(--foreground);
+    border: none;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    font-family: "Ubuntu Mono";
+    transition: background-color 0.2s ease;
+}
+
+.btn-calculate:hover {
+    background-color: #0284c7;
+}
+
+.result-container {
+    margin-top: 2rem;
+    display: none;
+}
+
+.result-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: var(--muted);
+}
+
+.tab.active {
+    color: var(--accent);
+    border-bottom: 2px solid var(--accent);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.result-box {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem;
+    font-family: monospace;
+}
+
+.truth-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.truth-table th,
+.truth-table td {
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.truth-table th {
+    background-color: rgba(51, 65, 85, 0.5);
+}
+
+.truth-table tr:nth-child(even) {
+    background-color: rgba(51, 65, 85, 0.2);
+}

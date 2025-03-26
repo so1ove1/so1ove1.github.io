@@ -1,100 +1,94 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Boolca - Генерация булевой функции</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/task2.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/favicon/site.webmanifest">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boolca - Получение остаточной функции</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/task2.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
 </head>
-
 <body>
-    <header id="main-header">
-        <div class="container">
-            <a href="/index.html" class="logo"><span>Boolca</span></a>
-
-            <nav class="desktop-nav">
-                <a href="/index.html">Главная</a>
-                <a href="/index.html#tasks">Задачи</a>
-                <a href="">О команде</a>
-            </nav>
-
-            <button id="mobile-menu-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                    <line x1="4" x2="20" y1="12" y2="12" />
-                    <line x1="4" x2="20" y1="6" y2="6" />
-                    <line x1="4" x2="20" y1="18" y2="18" />
-                </svg>
-            </button>
+  <header id="main-header">
+    <div class="container">
+      <a href="/index.html" class="logo"><span>Boolca</span></a>
+      <nav class="desktop-nav">
+        <a href="/index.html">Главная</a>
+        <a href="/index.html#tasks">Задачи</a>
+        <a href="">О команде</a>
+      </nav>
+      <button id="mobile-menu-toggle">
+        <svg width="24" height="24" viewBox="0 0 24 24">
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden">
+      <nav>
+        <a href="/index.html">Главная</a>
+        <a href="/index.html#tasks">Задачи</a>
+        <a href="">О команде</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div id="binary-background"></div>
+      <div class="container">
+        <h1>Получение остаточной функции</h1>
+        <p>Задача 2: На вход — вектор функции, значение аргумента (0 или 1) и номер аргумента, на выход — соответствующая остаточная функция</p>
+      </div>
+    </section>
+    <section class="container" style="padding: 2rem 0 4rem;">
+      <div class="task-container">
+        <h2 class="task-title">Получение остаточной функции</h2>
+        <p class="task-description">Введите вектор булевой функции, значение аргумента (0 или 1) и номер этого аргумента для получения соответствующей остаточной функции.</p>
+        <div class="info-box">
+          <h4>Информация</h4>
+          <p>Остаточная функция получается из исходной функции путем фиксации значения одного из аргументов. При фиксации значения аргумента (0 или 1) размерность вектора функции уменьшается в два раза.</p>
         </div>
-
-        <div id="mobile-menu" class="hidden">
-            <nav>
-                <a href="/index.html">Главная</a>
-                <a href="/index.html#tasks">Задачи</a>
-                <a href="">О команде</a>
-            </nav>
+        <div class="input-group">
+          <label for="input-vector">Вектор функции:</label>
+          <input type="text" id="input-vector" placeholder="Например: 01101001">
+          <div class="error-message" id="error-vector">Введите корректный вектор (только 0 и 1)</div>
         </div>
-    </header>
-
-    <main>
-        <section class="hero">
-            <div id="binary-background"></div>
-            <div class="container">
-                <h1>Генерация булевой функции</h1>
-                <p>Задача 1: На вход — число n, на выход — булева функция от n аргументов</p>
-            </div>
-        </section>
-
-        <section class="container" style="padding: 2rem 0 4rem;">
-            <div class="task-container">
-                <h2 class="task-title">Генерация булевой функции</h2>
-                <p class="task-description">Введите количество аргументов (n) для генерации булевой функции.
-                    Максимальное значение n = 5.</p>
-
-                <div class="input-group">
-                    <label for="input-n">Количество аргументов (n):</label>
-                    <input type="number" id="input-n" min="1" max="5" value="2">
-                    <div class="error-message" id="error-message">Пожалуйста, введите число от 1 до 5</div>
-                </div>
-
-                <button class="btn-generate" id="generate-btn">Сгенерировать функцию</button>
-
-                <div class="result-container" id="result-container">
-                    <h3 class="result-title">Результат:</h3>
-
-                    <div class="tabs">
-                        <div class="tab active" data-tab="vector">Вектор функции</div>
-                        <div class="tab" data-tab="table">Таблица истинности</div>
-                    </div>
-
-                    <div class="tab-content active" id="vector-tab">
-                        <div class="result-box" id="vector-result"></div>
-                    </div>
-
-                    <div class="tab-content" id="table-tab">
-                        <div class="result-box">
-                            <table class="truth-table" id="truth-table"></table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="about">
-            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
-            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        <div class="input-row">
+          <div class="input-group">
+            <label for="input-value">Значение аргумента:</label>
+            <select id="input-value">
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="input-arg">Номер аргумента (начиная с 1):</label>
+            <input type="number" id="input-arg" min="1" value="1">
+            <div class="error-message" id="error-arg">Введите корректный номер аргумента</div>
+          </div>
         </div>
-    </footer>
-    <script src="/js/task2.js"></script>
-    <script src="/js/script.js"></script>
+        <button class="btn-calculate" id="calculate-btn">Получить остаточную функцию</button>
+        <div class ="result-container" id="result-container">
+          <h3 class="result-title">Результат:</h3>
+          <div class="tab active" data-tab="vector">Вектор функции</div>
+          <div class="tab-content active" id="vector-tab">
+            <div class="result-box" id="vector-result"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="about">
+      <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+      <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+    </div>
+  </footer>
+  <script src="/js/task2.js"></script>
+  <script src="/js/script.js"></script>
 </body>
-
 </html>
