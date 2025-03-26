@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolca - Построение СДНФ</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/task8.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/index.html" class="logo"><span>Boolca</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="binary-background"></div>
+            <div class="container">
+                <h1>Построение СДНФ</h1>
+                <p>Задача 3: На вход — вектор функции, на выход — совершенная дизъюнктивная нормальная форма (СДНФ)</p>
+            </div>
+        </section>
+
+        <section class="container" style="padding: 2rem 0 4rem;">
+            <div class="task-container">
+                <h2 class="task-title">Построение СДНФ</h2>
+                <p class="task-description">Введите вектор булевой функции для построения её совершенной дизъюнктивной нормальной формы.</p>
+
+                <div class="info-box">
+                    <h4>Информация</h4>
+                    <p>СДНФ (совершенная дизъюнктивная нормальная форма) — это представление булевой функции в виде дизъюнкции конъюнкций, где каждая конъюнкция содержит все переменные функции либо в прямом, либо в инверсном виде.</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="input-vector">Вектор функции:</label>
+                    <input type="text" id="input-vector" placeholder="Например: 01101001">
+                    <div class="error-message" id="error-vector">Введите корректный вектор (только 0 и 1)</div>
+                </div>
+
+                <button class="btn-calculate" id="calculate-btn">Построить СДНФ</button>
+
+                <div class="result-container" id="result-container">
+                    <h3 class="result-title">Результат:</h3>
+
+                    <div class="tabs">
+                        <div class="tab active" data-tab="pdnf">СДНФ</div>
+                        <div class="tab" data-tab="table">Таблица истинности</div>
+                    </div>
+
+                    <div class="tab-content active" id="pdnf-tab">
+                        <div class="result-box" id="pdnf-result"></div>
+                    </div>
+
+                    <div class="tab-content" id="table-tab">
+                        <div class="result-box">
+                            <table class="truth-table" id="truth-table"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/js/task8.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
