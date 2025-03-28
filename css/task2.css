@@ -165,3 +165,27 @@
 .vector-highlight {
     font-weight: bold;
 }
+
+.input-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  
+  .input-row .input-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+  
+  .input-row .input-group input {
+    height: 40px;
+  }
+  
+  @media (max-width: 768px) {
+    .input-row {
+      flex-direction: column;
+    }
+    .input-row .input-group {
+      width: 100%;
+    }
+  }
