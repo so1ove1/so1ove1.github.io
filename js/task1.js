@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Add function result header
         const resultTh = document.createElement('th');
-        resultTh.textContent = 'f(x)';
+        resultTh.textContent = 'f';
         headerRow.appendChild(resultTh);
         
         truthTable.appendChild(headerRow);

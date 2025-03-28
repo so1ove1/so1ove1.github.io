@@ -15,11 +15,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Проверяем, что вектор состоит только из 0 и 1
         if (!binaryRegex.test(vector)) {
-            return false;
+            return { valid: false, errorMessage: 'Вектор должен содержать только 0 и 1' };
         }
 
         // Проверяем, что длина вектора является степенью двойки
-        return (length & (length - 1)) === 0 && length !== 0;
+        if ((length & (length - 1)) !== 0 || length === 0) {
+            return { valid: false, errorMessage: 'Длина вектора должна быть степенью 2' };
+        }
+
+        return { valid: true };
     }
 
     // Функция для определения количества переменных по длине вектора
@@ -47,13 +51,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (vector[i] === '1') {
                 const variables = generateVariableSet(i, varsCount);
                 let term = '';
-                
+
                 // Формируем конъюнкцию переменных
                 for (let j = 0; j < varsCount; j++) {
-                    if (j > 0) term += '&';
+                    if (j > 0) term += ' & ';
                     term += variables[j] === '0' ? `¬x${j + 1}` : `x${j + 1}`;
                 }
-                
+
+                // Добавляем скобки вокруг конъюнкции
+                term = `(${term})`;
                 terms.push(term);
             }
         }
@@ -80,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
             headerRow.appendChild(th);
         }
         const resultTh = document.createElement('th');
-        resultTh.textContent = 'f(x)';
+        resultTh.textContent = 'f';
         headerRow.appendChild(resultTh);
         truthTable.appendChild(headerRow);
 
@@ -109,7 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const vector = inputVector.value.trim();
 
         // Проверяем корректность ввода
-        if (!validateInput(vector)) {
+        const validation = validateInput(vector);
+        if (!validation.valid) {
+            errorVector.textContent = validation.errorMessage;
             errorVector.style.display = 'block';
             resultContainer.style.display = 'none';
             return;

@@ -314,5 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             correctAnswerContainer.classList.add('hidden');
         }
+
+        checkAnswerBtn.disabled = true;
     }
 });

@@ -1,93 +1,75 @@
 .task-container {
-    background-color: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 2rem;
     max-width: 800px;
     margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--card);
+    border-radius: 8px;
+    border: 1px solid var(--border);
 }
 
 .task-title {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
     color: var(--accent);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.75rem;
 }
 
 .task-description {
     color: var(--muted);
     margin-bottom: 2rem;
-}
-
-.info-box {
-    background-color: rgba(14, 165, 233, 0.1);
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    padding: 1rem;
-    margin-bottom: 2rem;
-}
-
-.info-box h4 {
-    color: var(--accent);
-    margin-bottom: 0.5rem;
+    text-align: center;
+    font-size: 1rem;
 }
 
 .input-group {
     margin-bottom: 1.5rem;
 }
 
-.input-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-
-@media (min-width: 640px) {
-    .input-row {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
 .input-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: var(--muted);
+    color: var(--foreground);
+    font-size: 1rem;
 }
 
-.input-group input,
-.input-group select {
+.input-group input {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.75rem;
     background-color: var(--background);
     border: 1px solid var(--border);
     border-radius: 4px;
     color: var(--foreground);
     font-family: "Ubuntu Mono";
+    font-size: 1rem;
 }
 
-.input-group input:focus,
-.input-group select:focus {
+.input-group input:focus {
     outline: none;
     border-color: var(--accent);
 }
 
-.error-message {
-    color: #ef4444;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: none;
+.input-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.input-row .input-group {
+    flex: 1;
+    margin-bottom: 0;
 }
 
 .btn-calculate {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
     background-color: var(--accent);
     color: var(--foreground);
     border: none;
     border-radius: 4px;
-    padding: 0.75rem 1.5rem;
+    font-family: "Ubuntu Mono";
     font-size: 1rem;
     cursor: pointer;
-    width: 100%;
-    font-family: "Ubuntu Mono";
     transition: background-color 0.2s ease;
 }
 
@@ -101,33 +83,9 @@
 }
 
 .result-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 1rem;
-}
-
-.tab {
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    color: var(--muted);
-}
-
-.tab.active {
     color: var(--accent);
-    border-bottom: 2px solid var(--accent);
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
 }
 
 .result-box {
@@ -135,26 +93,75 @@
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
     font-family: monospace;
 }
 
-.truth-table {
+.error-message {
+    color: #ef4444;
+    margin-top: 0.5rem;
+    display: none;
+    font-size: 0.875rem;
+}
+
+.info-box {
+    background-color: rgba(14, 165, 233, 0.1);
+    border-left: 4px solid var(--accent);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--muted);
+    font-size: 1rem;
+}
+
+.info-box h4 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+
+.input-group select {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
-
-.truth-table th,
-.truth-table td {
+    padding: 0.75rem;
+    background-color: var(--background);
     border: 1px solid var(--border);
-    padding: 0.5rem;
-    text-align: center;
+    border-radius: 4px;
+    color: var(--foreground);
+    font-family: "Ubuntu Mono";
+    font-size: 1rem;
 }
 
-.truth-table th {
-    background-color: rgba(51, 65, 85, 0.5);
+.input-group select:focus {
+    outline: none;
+    border-color: var (--accent);
 }
 
-.truth-table tr:nth-child(even) {
-    background-color: rgba(51, 65, 85, 0.2);
+.btn-calculate {
+    padding: 0.75rem;
+    font-size: 1rem;
+}
+
+.result-title {
+    font-size: 1.5rem;
+}
+
+.tabs {
+    font-size: 1rem;
+}
+
+.tab {
+    padding: 0.5rem 1rem;
+}
+
+.info-box {
+    font-size: 1rem;
+}
+
+.vector-display {
+    font-size: 1.2rem;
+}
+
+.vector-highlight {
+    font-weight: bold;
 }

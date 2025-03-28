@@ -50,12 +50,12 @@
         <p class="task-description">Введите вектор булевой функции, значение аргумента (0 или 1) и номер этого аргумента для получения соответствующей остаточной функции.</p>
         <div class="info-box">
           <h4>Информация</h4>
-          <p>Остаточная функция получается из исходной функции путем фиксации значения одного из аргументов. При фиксации значения аргумента (0 или 1) размерность вектора функции уменьшается в два раза.</p>
+          <p>Остаточная функция получается из исходной функции путем фиксации значения одного из аргументов.</p>
         </div>
         <div class="input-group">
           <label for="input-vector">Вектор функции:</label>
           <input type="text" id="input-vector" placeholder="Например: 01101001">
-          <div class="error-message" id="error-vector">Введите корректный вектор (только 0 и 1)</div>
+          <div class="error-message" id="error-vector">Введите корректный вектор (только 0 и 1). </div>
         </div>
         <div class="input-row">
           <div class="input-group">
@@ -74,7 +74,6 @@
         <button class="btn-calculate" id="calculate-btn">Получить остаточную функцию</button>
         <div class ="result-container" id="result-container">
           <h3 class="result-title">Результат:</h3>
-          <div class="tab active" data-tab="vector">Вектор функции</div>
           <div class="tab-content active" id="vector-tab">
             <div class="result-box" id="vector-result"></div>
           </div>

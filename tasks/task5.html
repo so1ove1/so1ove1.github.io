@@ -38,7 +38,7 @@
             <div id="binary-background"></div>
             <div class="container">
                 <h1>Существенные и фиктивные переменные</h1>
-                <p>Определите какие переменные являются существенными, а какие фиктивными для заданной булевой функции</p>
+                <p>Задача 5: Игра. Существенные и фиктивные переменные. Система предлагает вектор функции. Пользователь выбирает существенные и фиктивные переменные.</p>
             </div>
         </section>
 
@@ -49,8 +49,8 @@
 
                 <div class="info-box">
                     <h4>Информация</h4>
-                    <p>Переменная является <strong>существенной</strong>, если функция действительно зависит от неё (изменение значения переменной приводит к изменению значения функции).</p>
-                    <p>Переменная является <strong>фиктивной</strong>, если функция не зависит от неё (изменение значения переменной не влияет на значение функции).</p>
+                    <p>Переменная является <strong>существенной</strong>, если изменение значения переменной приводит к изменению значения функции.</p>
+                    <p>Переменная является <strong>фиктивной</strong>, если изменение значения переменной не влияет на значение функции.</p>
                 </div>
                 
                 <div class="stat-container">
@@ -63,36 +63,22 @@
                 </div>
 
                 <div class="function-display">
-                    <h3>Определите существенные и фиктивные переменные для функции:</h3>
-                    <div class="vector-display">
-                        <div id="function-vector" class="animate-pulse">0000</div>
-                    </div>
-                    
                     <div class="tabs">
                         <div class="tab active" data-tab="vector">Вектор</div>
-                        <div class="tab" data-tab="table">Таблица истинности</div>
+                        <div class="tab" data-tab="table">Таблица функции</div>
                     </div>
                     
                     <div class="tab-content active" id="vector-tab">
                         <div class="result-box">
-                            <p>Вектор булевой функции от 3-х аргументов — это набор из 8 значений в порядке: (000), (001), (010), (011), (100), (101), (110), (111)</p>
+                            <div class="vector-display">
+                                <div id="function-vector" class="animate-pulse">0000</div>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="tab-content" id="table-tab">
                         <div class="result-box">
-                            <table class="truth-table">
-                                <thead>
-                                    <tr>
-                                        <th>x₁</th>
-                                        <th>x₂</th>
-                                        <th>x₃</th>
-                                        <th>f(x₁,x₂,x₃)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="truth-table-body">
-                                </tbody>
-                            </table>
+                            <table class="truth-table" id="truth-table-body"></table>
                         </div>
                     </div>
                 </div>
@@ -113,6 +99,9 @@
                         <label for="var3">x₃</label>
                     </div>
                 </div>
+                
+                <p class="options-info">Если таковых нет, оставьте поле пустым</p>
+                
                 
                 <div class="action-buttons">
                     <button id="check-answer" class="btn-calculate">Проверить ответ</button>
