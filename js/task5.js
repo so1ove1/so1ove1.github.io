@@ -272,9 +272,25 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
+    function scrollToFunctionVector() {
+        const functionVectorElement = document.getElementById('stat-container');
+        functionVectorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    
+      function scrollToResult() {
+        const functionVectorElement = document.getElementById('result-message');
+        functionVectorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+
     // Обработчики событий
-    checkAnswerBtn.addEventListener('click', checkAnswer);
-    nextRoundBtn.addEventListener('click', startNewRound);
+    checkAnswerBtn.addEventListener('click', function() {
+        checkAnswer();
+        scrollToResult();
+      });
+    nextRoundBtn.addEventListener('click', function() {
+        startNewRound();
+        scrollToFunctionVector();
+      });
 
     // Запускаем первый раунд
     startNewRound();

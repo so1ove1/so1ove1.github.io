@@ -140,6 +140,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize the game
     initGame();
 
+    function scrollToFunctionVector() {
+        const functionVectorElement = document.getElementById('task-container');
+        functionVectorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    
+      function scrollToResult() {
+        const functionVectorElement = document.getElementById('result-message');
+        functionVectorElement.scrollIntoView({ behavior: 'smooth' });
+      }
+
     // Tab switching
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -157,8 +167,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Event listeners
-    checkAnswerBtn.addEventListener('click', checkAnswer);
-    nextRoundBtn.addEventListener('click', startNewRound);
+    checkAnswerBtn.addEventListener('click', function() {
+        checkAnswer();
+        scrollToResult();
+      });
+    nextRoundBtn.addEventListener('click', function() {
+        startNewRound();
+        scrollToFunctionVector();
+      });
 
     // Functions
     function initGame() {

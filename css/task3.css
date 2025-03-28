@@ -177,3 +177,23 @@
     color: var(--accent);
     font-weight: bold;
 }
+
+.input-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .input-group {
+    flex-basis: 45%;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .input-row {
+      flex-direction: column;
+    }
+    .input-group {
+      flex-basis: 100%;
+    }
+  }
