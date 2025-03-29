@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolca - Предполные классы</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/task10.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/index.html" class="logo"><span>Boolca</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="binary-background"></div>
+            <div class="container">
+                <h1>Предполные классы</h1>
+                <p>Задача 9: Определите, каким предполным классам принадлежит заданная булева функция</p>
+            </div>
+        </section>
+
+        <section class="container" style="padding: 2rem 0 4rem;">
+            <div class="task-container">
+                <h2 class="task-title">Игра: Предполные классы</h2>
+                <p class="task-description">Определите, каким предполным классам принадлежит данная булева функция.</p>
+
+                <div class="info-box">
+                    <h4>Информация</h4>
+                    <p>Предполные классы булевых функций — это максимальные классы, не совпадающие со всем множеством булевых функций. Существует пять предполных классов:</p>
+                    <ul class="class-list">
+                        <li><strong>T₀</strong> - класс функций, сохраняющих константу 0</li>
+                        <li><strong>T₁</strong> - класс функций, сохраняющих константу 1</li>
+                        <li><strong>L</strong> - класс линейных функций</li>
+                        <li><strong>S</strong> - класс самодвойственных функций</li>
+                        <li><strong>M</strong> - класс монотонных функций</li>
+                    </ul>
+                </div>
+
+                <div class="game-container">
+                    <div class="vector-display">
+                        <h3>Вектор функции:</h3>
+                        <div id="function-vector" class="vector"></div>
+                    </div>
+
+                    <div class="class-selection">
+                        <h3>Выберите классы:</h3>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="T0"> T₀ (сохраняет 0)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="T1"> T₁ (сохраняет 1)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="L"> L (линейные)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="S"> S (самодвойственные)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="M"> M (монотонные)
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="check-btn" class="btn-check">Проверить</button>
+                    <button id="next-btn" class="btn-next">Следующая функция</button>
+
+                    <div id="result-container" class="result-container">
+                        <h3 class="result-title">Результат:</h3>
+                        <div id="result-message" class="result-message"></div>
+                        <div id="explanation" class="explanation"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/js/task10.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
