@@ -10,6 +10,22 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentVector = '';
     let correctClasses = new Set();
 
+    // Add animation class toggle effect on checkboxes
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const label = this.closest('.checkbox-label');
+            if (this.checked) {
+                label.style.borderColor = 'var(--accent, #0ea5e9)';
+                label.style.borderWidth = '2px';
+                label.style.backgroundColor = 'rgba(14, 165, 233, 0.1)';
+            } else {
+                label.style.borderColor = 'var(--border, #e2e8f0)';
+                label.style.borderWidth = '1px';
+                label.style.backgroundColor = 'rgba(51, 65, 85, 0.3)';
+            }
+        });
+    });
+
     // Генерация случайного вектора функции
     function generateVector(length = 8) {
         return Array.from({ length }, () => Math.random() > 0.5 ? '1' : '0').join('');
@@ -114,6 +130,14 @@ document.addEventListener('DOMContentLoaded', function () {
         return exp;
     }
 
+    // Анимация пульсации вектора
+    function animateVector() {
+        functionVector.classList.remove('animate-pulse');
+        setTimeout(() => {
+            functionVector.classList.add('animate-pulse');
+        }, 10);
+    }
+
     // Начать новую игру
     function startNewGame() {
         // Генерируем новый вектор
@@ -124,13 +148,25 @@ document.addEventListener('DOMContentLoaded', function () {
         correctClasses = determineClasses(currentVector);
         
         // Сбрасываем UI
-        checkboxes.forEach(cb => cb.checked = false);
+        checkboxes.forEach(cb => {
+            cb.checked = false;
+            const label = cb.closest('.checkbox-label');
+            label.style.borderColor = 'var(--border, #e2e8f0)';
+            label.style.borderWidth = '1px';
+            label.style.backgroundColor = 'rgba(51, 65, 85, 0.3)';
+        });
+        
         resultContainer.style.display = 'none';
         nextBtn.style.display = 'none';
+        checkBtn.style.display = 'block';
+        
+        // Анимация вектора
+        animateVector();
     }
 
     // Проверка ответа
     checkBtn.addEventListener('click', function() {
+        checkBtn.disabled = true;
         const selectedClasses = new Set();
         checkboxes.forEach(cb => {
             if (cb.checked) selectedClasses.add(cb.value);
@@ -152,7 +188,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Следующая функция
-    nextBtn.addEventListener('click', startNewGame);
+    nextBtn.addEventListener('click', function() {
+        startNewGame();
+         // Разблокировка кнопки "Проверить"
+    checkBtn.disabled = false;
+        // Прокрутить наверх
+        document.querySelector('.task-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
     // Начинаем игру
     startNewGame();
