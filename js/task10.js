@@ -6,13 +6,44 @@ document.addEventListener('DOMContentLoaded', function () {
     const resultMessage = document.getElementById('result-message');
     const explanation = document.getElementById('explanation');
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const correctCountEl = document.getElementById('correct-count');
+    const totalCountEl = document.getElementById('total-count');
 
     let currentVector = '';
     let correctClasses = new Set();
+    let usesTwoVariables = false;
+    
+    // Инициализация счетчиков результатов
+    let correctCount = 0;
+    let totalCount = 0;
 
     // Add animation class toggle effect on checkboxes
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
+            // Если выбран "Никому", снимаем все остальные чекбоксы
+            if (this.value === 'NONE' && this.checked) {
+                checkboxes.forEach(cb => {
+                    if (cb.value !== 'NONE') {
+                        cb.checked = false;
+                        const label = cb.closest('.checkbox-label');
+                        label.style.borderColor = 'var(--border, #e2e8f0)';
+                        label.style.borderWidth = '1px';
+                        label.style.backgroundColor = 'rgba(51, 65, 85, 0.3)';
+                    }
+                });
+            } else if (this.checked && this.value !== 'NONE') {
+                // Если выбран любой класс кроме "Никому", снимаем чекбокс с "Никому"
+                checkboxes.forEach(cb => {
+                    if (cb.value === 'NONE') {
+                        cb.checked = false;
+                        const label = cb.closest('.checkbox-label');
+                        label.style.borderColor = 'var(--border, #e2e8f0)';
+                        label.style.borderWidth = '1px';
+                        label.style.backgroundColor = 'rgba(51, 65, 85, 0.3)';
+                    }
+                });
+            }
+
             const label = this.closest('.checkbox-label');
             if (this.checked) {
                 label.style.borderColor = 'var(--accent, #0ea5e9)';
@@ -26,9 +57,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Генерация случайного вектора функции
-    function generateVector(length = 8) {
-        return Array.from({ length }, () => Math.random() > 0.5 ? '1' : '0').join('');
+    // Генерация случайного вектора функции от одной или двух переменных
+    function generateVector() {
+        // С вероятностью 50% генерируем функцию от двух переменных
+        usesTwoVariables = Math.random() > 0.5;
+        
+        if (usesTwoVariables) {
+            // Функция от двух переменных - 4 значения (2^2)
+            const vector = Array.from({ length: 4 }, () => Math.random() > 0.5 ? '1' : '0').join('');
+            return vector;
+        } else {
+            // Функция от трех переменных - 8 значений (2^3)
+            const vector = Array.from({ length: 8 }, () => Math.random() > 0.5 ? '1' : '0').join('');
+            return vector;
+        }
     }
 
     // Проверка сохранения константы 0
@@ -109,7 +151,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Генерация объяснения для каждого класса
     function generateExplanation(vector, selectedClasses, correctClasses) {
-        let exp = '<h4>Объяснение:</h4><ul>';
+        const variablesCount = Math.log2(vector.length);
+        let exp = '<h4>Объяснение:</h4>';
+        
+        // Добавляем информацию о количестве переменных
+        exp += `<p>Данная функция зависит от ${variablesCount} переменных.</p>`;
+        
+        // Проверяем, не принадлежит ли функция ни одному из классов
+        if (correctClasses.size === 0) {
+            exp += `<p>Эта функция не принадлежит ни одному из предполных классов.</p>`;
+        }
+        
+        exp += '<ul>';
         
         // T0
         exp += `<li><strong>T₀</strong> (сохранение 0): функция ${checksT0(vector) ? '' : 'не '}принадлежит классу T₀, так как f(0,0,...,0) = ${vector[0]}${checksT0(vector) ? ' = 0' : ' ≠ 0'}</li>`;
@@ -159,9 +212,21 @@ document.addEventListener('DOMContentLoaded', function () {
         resultContainer.style.display = 'none';
         nextBtn.style.display = 'none';
         checkBtn.style.display = 'block';
+        checkBtn.disabled = false;
         
         // Анимация вектора
         animateVector();
+    }
+
+    // Прокрутка к результатам
+    function scrollToResult() {
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Прокрутка к вектору функции
+    function scrollToFunctionVector() {
+        const functionVectorElement = document.getElementById('stat-container');
+        functionVectorElement.scrollIntoView({ behavior: 'smooth' });
     }
 
     // Проверка ответа
@@ -169,11 +234,34 @@ document.addEventListener('DOMContentLoaded', function () {
         checkBtn.disabled = true;
         const selectedClasses = new Set();
         checkboxes.forEach(cb => {
-            if (cb.checked) selectedClasses.add(cb.value);
+            if (cb.checked && cb.value !== 'NONE') {
+                selectedClasses.add(cb.value);
+            }
         });
 
-        const isCorrect = Array.from(correctClasses).every(c => selectedClasses.has(c)) &&
-                         Array.from(selectedClasses).every(c => correctClasses.has(c));
+        // Получаем значение чекбокса "Никому"
+        const noneSelected = Array.from(checkboxes).find(cb => cb.value === 'NONE')?.checked || false;
+
+        // Проверяем правильность ответа
+        let isCorrect = false;
+        if (correctClasses.size === 0 && noneSelected) {
+            // Если функция не принадлежит ни одному классу и выбран "Никому"
+            isCorrect = true;
+        } else if (correctClasses.size > 0 && !noneSelected) {
+            // Если функция принадлежит классам и проверяем совпадение выбранных и правильных классов
+            isCorrect = Array.from(correctClasses).every(c => selectedClasses.has(c)) &&
+                        Array.from(selectedClasses).every(c => correctClasses.has(c));
+        }
+
+        // Обновляем счетчики
+        totalCount++;
+        if (isCorrect) {
+            correctCount++;
+        }
+
+        // Обновляем отображение счетчиков
+        correctCountEl.textContent = correctCount;
+        totalCountEl.textContent = totalCount;
 
         resultMessage.className = 'result-message ' + (isCorrect ? 'correct' : 'incorrect');
         resultMessage.textContent = isCorrect ? 'Правильно!' : 'Неправильно. Попробуйте еще раз!';
@@ -184,16 +272,14 @@ document.addEventListener('DOMContentLoaded', function () {
         nextBtn.style.display = 'block';
         
         // Прокрутить к результатам
-        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToResult();
     });
 
     // Следующая функция
     nextBtn.addEventListener('click', function() {
         startNewGame();
-         // Разблокировка кнопки "Проверить"
-    checkBtn.disabled = false;
         // Прокрутить наверх
-        document.querySelector('.task-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToFunctionVector();
     });
 
     // Начинаем игру

@@ -70,6 +70,16 @@
                     </ul>
                 </div>
 
+                <!-- Счетчик результатов -->
+                <div class="stat-container" id="stat-container">
+                    <div class="stat correct">
+                        Верно: <span id="correct-count">0</span>
+                    </div>
+                    <div class="stat total">
+                        Всего: <span id="total-count">0</span>
+                    </div>
+                </div>
+
                 <div class="game-container">
                     <div class="vector-display">
                         <h3>Вектор функции:</h3>
@@ -93,6 +103,9 @@
                             </label>
                             <label class="checkbox-label">
                                 <input type="checkbox" value="M"> M (монотонные)
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="NONE"> Никакому
                             </label>
                         </div>
                     </div>
