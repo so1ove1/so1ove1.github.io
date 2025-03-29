@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,15 +12,18 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
   <link rel="manifest" href="/favicon/site.webmanifest">
 </head>
+
 <body>
   <header id="main-header">
     <div class="container">
       <a href="/index.html" class="logo"><span>Boolca</span></a>
+
       <nav class="desktop-nav">
         <a href="/index.html">Главная</a>
         <a href="/index.html#tasks">Задачи</a>
-        <a href="">О команде</a>
+        <a href="/about/about.html">О команде</a>
       </nav>
+
       <button id="mobile-menu-toggle">
         <svg width="24" height="24" viewBox="0 0 24 24">
           <line x1="4" x2="20" y1="12" y2="12" />
@@ -28,11 +32,12 @@
         </svg>
       </button>
     </div>
+
     <div id="mobile-menu" class="hidden">
       <nav>
         <a href="/index.html">Главная</a>
         <a href="/index.html#tasks">Задачи</a>
-        <a href="">О команде</a>
+        <a href="/about/about.html">О команде</a>
       </nav>
     </div>
   </header>
@@ -41,13 +46,15 @@
       <div id="binary-background"></div>
       <div class="container">
         <h1>Получение остаточной функции</h1>
-        <p>Задача 2: На вход — вектор функции, значение аргумента (0 или 1) и номер аргумента, на выход — соответствующая остаточная функция</p>
+        <p>Задача 2: На вход — вектор функции, значение аргумента (0 или 1) и номер аргумента, на выход —
+          соответствующая остаточная функция</p>
       </div>
     </section>
     <section class="container" style="padding: 2rem 0 4rem;">
       <div class="task-container">
         <h2 class="task-title">Получение остаточной функции</h2>
-        <p class="task-description">Введите вектор булевой функции, значение аргумента (0 или 1) и номер этого аргумента для получения соответствующей остаточной функции.</p>
+        <p class="task-description">Введите вектор булевой функции, значение аргумента (0 или 1) и номер этого аргумента
+          для получения соответствующей остаточной функции.</p>
         <div class="info-box">
           <h4>Информация</h4>
           <p>Остаточная функция получается из исходной функции путем фиксации значения одного из аргументов.</p>
@@ -72,7 +79,7 @@
           </div>
         </div>
         <button class="btn-calculate" id="calculate-btn">Получить остаточную функцию</button>
-        <div class ="result-container" id="result-container">
+        <div class="result-container" id="result-container">
           <h3 class="result-title">Результат:</h3>
           <div class="tab-content active" id="vector-tab">
             <div class="result-box" id="vector-result"></div>
@@ -90,4 +97,5 @@
   <script src="/js/task2.js"></script>
   <script src="/js/script.js"></script>
 </body>
+
 </html>

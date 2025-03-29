@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>О команде - Boolca</title>
+    <link rel="stylesheet" href="/about/about.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/index.html" class="logo"><span>Boolca</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="/about/about.html">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/about/about.html">Главная</a>
+                <a href="/about/about.html">Задачи</a>
+                <a href="/about/about.html">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="team">
+            <div id="binary-background"></div>
+            <div class="container">
+                <h1>Наша команда</h1>
+                <div class="team-grid">
+                    <!-- Team Member 1 -->
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <img src="/about/maria.jpg" alt="Мария Буздыган">
+                        </div>
+                        <h3>Буздыган Мария</h3>
+                        <p class="role">Team Lead</p>
+                        <p class="info">Студентка ИМИТ ИГУ 2262-ДБ</p>
+                        <a href="https://t.me/Kid_1504" class="social-link" target="_blank">
+                            <img src="/about/telegram.svg" alt="Telegram" class="telegram-icon">
+                            @Kid_1504
+                        </a>
+                    </div>
+
+                    <!-- Team Member 2 -->
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <img src="/about/semen.jpg" alt="Семён Басманов">
+                        </div>
+                        <h3>Басманов Семён</h3>
+                        <p class="role">Разработчик</p>
+                        <p class="info">Студент ИМИТ ИГУ 2262-ДБ</p>
+                        <p class="task-info">Задачи с чётными номерами</p>
+                        <a href="https://t.me/agitarista" class="social-link" target="_blank">
+                            <img src="/about/telegram.svg" alt="Telegram" class="telegram-icon">
+                            @agitarista
+                        </a>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="team-card">
+                        <div class="member-photo">
+                            <img src="/about/daniil.jpg" alt="Даниил Соловьёв">
+                        </div>
+                        <h3>Соловьёв Даниил</h3>
+                        <p class="role">Разработчик, Дизайнер</p>
+                        <p class="info">Студент ИМИТ ИГУ 2262-ДБ</p>
+                        <p class="task-info">Задачи с нечётными номерами</p>
+                        <a href="https://t.me/so1ove1" class="social-link" target="_blank">
+                            <img src="/about/telegram.svg" alt="Telegram" class="telegram-icon">
+                            @so1ove1
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
