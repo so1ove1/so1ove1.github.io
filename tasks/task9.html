@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolca - Построение СКНФ</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/task9.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/index.html" class="logo"><span>Boolca</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="binary-background"></div>
+            <div class="container">
+                <h1>Построение СКНФ</h1>
+                <p>Задача 9: Пользователь вводит вектор функции. Система строит СКНФ.</p>
+            </div>
+        </section>
+
+        <section class="container" style="padding: 2rem 0 4rem;">
+            <div class="task-container">
+                <h2 class="task-title">Построение СКНФ</h2>
+                <p class="task-description">Введите вектор булевой функции для построения её совершенной конъюнктивной нормальной формы.</p>
+
+                <div class="info-box">
+                    <h4>Информация</h4>
+                    <p>СКНФ (совершенная конъюнктивная нормальная форма) — это представление булевой функции в виде конъюнкции дизъюнкций, где в каждую дизъюнкцию входят все переменные данного набора.</p>
+                </div>
+
+                <div class="input-group">
+                    <label for="input-vector">Вектор функции:</label>
+                    <input type="text" id="input-vector" placeholder="Например: 01101001">
+                    <div class="error-message" id="error-vector">Введите корректный вектор (только 0 и 1)</div>
+                </div>
+
+                <button class="btn-calculate" id="calculate-btn">Построить СКНФ</button>
+
+                <div class="result-container" id="result-container">
+                    <h3 class="result-title">Результат:</h3>
+
+                    <div class="tabs">
+                        <div class="tab active" data-tab="pcnf">СКНФ</div>
+                        <div class="tab" data-tab="table">Таблица функции</div>
+                    </div>
+
+                    <div class="tab-content active" id="pcnf-tab">
+                        <div class="result-box" id="pcnf-result"></div>
+                    </div>
+
+                    <div class="tab-content" id="table-tab">
+                        <div class="result-box">
+                            <table class="truth-table" id="truth-table"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/js/task9.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>
