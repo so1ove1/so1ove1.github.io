@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolca - Игра ДНФ</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/task6.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/index.html" class="logo"><span>Boolca</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="binary-background"></div>
+            <div class="container">
+                <h1>Игра ДНФ</h1>
+                <p>Задача 6: Система предлагает вектор функции. Пользователь вводит ДНФ. Система определяет правильно или нет введена ДНФ.</p>
+            </div>
+        </section>
+
+        <section class="container" style="padding: 2rem 0 4rem;">
+            <div class="task-container">
+                <h2 class="task-title">Игра ДНФ</h2>
+                <p class="task-description">Постройте дизъюнктивную нормальную форму для предложенного вектора функции.</p>
+
+                <div class="info-box">
+                    <h4>Информация</h4>
+                    <p>ДНФ (дизъюнктивная нормальная форма) — это представление булевой функции в виде дизъюнкции элементарных конъюнкций.</p>
+                    <p>Используйте следующие обозначения:</p>
+                    <ul>
+                        <li>∨ - дизъюнкция (ИЛИ)</li>
+                        <li>& - конъюнкция (И)</li>
+                        <li>- - отрицание (НЕ)</li>
+                        <li>x1, x2, x3... - переменные</li>
+                    </ul>
+                    <p>Пример: x1 & -x2 ∨ x2 & x3</p>
+                </div>
+
+                <div id="stat-container" class="stat-container">
+                    <div class="stat correct">
+                        Верно: <span id="correct-count">0</span>
+                    </div>
+                    <div class="stat total">
+                        Всего: <span id="total-count">0</span>
+                    </div>
+                </div>
+
+                <div class="function-display">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="vector">Вектор</div>
+                        <div class="tab" data-tab="table">Таблица функции</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="vector-tab">
+                        <div class="result-box">
+                            <div class="vector-display">
+                                <div id="function-vector" class="animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="table-tab">
+                        <div class="result-box">
+                            <table class="truth-table" id="truth-table"></table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="input-dnf">Введите ДНФ:</label>
+                    <input type="text" id="input-dnf" placeholder="Например: x1 & -x2 ∨ x2 & x3">
+                    <div class="error-message" id="error-dnf"></div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-calculate" id="check-btn">Проверить</button>
+                    <div id="result-container" class="hidden">
+                        <div id="result-message"></div>
+                        <div class="result-box">
+                            <div id="help-content"></div>
+                        </div>
+                        <button class="btn-calculate btn-next" id="next-btn">Следующий раунд</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/js/task6.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>
