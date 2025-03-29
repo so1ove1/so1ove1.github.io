@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const functionVector = document.getElementById('function-vector');
     const inputCnf = document.getElementById('input-cnf');
     const errorCnf = document.getElementById('error-cnf');
@@ -22,30 +22,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputGroup = document.querySelector('.input-group');
     const keyboard = document.createElement('div');
     keyboard.className = 'virtual-keyboard';
-    
-    // Операторы
-    const operatorsGroup = document.createElement('div');
-    operatorsGroup.className = 'key-group';
+
+    // Операторы и переменные
+    const keysGroup = document.createElement('div');
+    keysGroup.className = 'key-group';
+
     ['∨', '&', '¬', '(', ')'].forEach(symbol => {
         const key = document.createElement('button');
         key.className = 'key';
         key.textContent = symbol;
         key.onclick = () => insertAtCursor(inputCnf, symbol);
-        operatorsGroup.appendChild(key);
+        keysGroup.appendChild(key);
     });
-    keyboard.appendChild(operatorsGroup);
 
-    // Переменные
-    const variablesGroup = document.createElement('div');
-    variablesGroup.className = 'key-group';
     for (let i = 1; i <= 9; i++) {
         const key = document.createElement('button');
         key.className = 'key';
         key.textContent = `x${i}`;
         key.onclick = () => insertAtCursor(inputCnf, `x${i}`);
-        variablesGroup.appendChild(key);
+        keysGroup.appendChild(key);
     }
-    keyboard.appendChild(variablesGroup);
+
+    keyboard.appendChild(keysGroup);
 
     inputGroup.insertAdjacentElement('afterend', keyboard);
 
@@ -174,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < currentVector.length; i++) {
             const row = document.createElement('tr');
             const variables = generateVariableSet(i);
-            
+
             // Добавляем значения переменных
             for (let j = 0; j < varsCount; j++) {
                 const td = document.createElement('td');
@@ -215,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const functionVectorElement = document.getElementById('stat-container');
         functionVectorElement.scrollIntoView({ behavior: 'smooth' });
     }
-    
+
     function scrollToResult() {
         const resultElement = document.getElementById('result-message');
         resultElement.scrollIntoView({ behavior: 'smooth' });
@@ -243,14 +241,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Обработчик клавиатуры для горячих клавиш
-    inputCnf.addEventListener('keydown', function(e) {
+    inputCnf.addEventListener('keydown', function (e) {
         if (e.altKey) {
             let insert = '';
             if (e.key === 'v') insert = '∨';
             else if (e.key === 'a') insert = '&';
             else if (e.key === 'n') insert = '¬';
             else if (/^[1-9]$/.test(e.key)) insert = 'x' + e.key;
-            
+
             if (insert) {
                 e.preventDefault();
                 const start = this.selectionStart;
@@ -262,9 +260,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Обработчик нажатия кнопки проверки
-    checkBtn.addEventListener('click', function() {
+    checkBtn.addEventListener('click', function () {
         const userCnf = inputCnf.value.trim();
-        
+
         if (!userCnf) {
             errorCnf.textContent = 'Введите КНФ';
             errorCnf.style.display = 'block';
@@ -274,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         totalCount++;
         const result = checkEquivalence(userCnf);
-        
+
         if (result.correct) {
             correctCount++;
         }
@@ -284,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         errorCnf.style.display = 'none';
         resultContainer.classList.remove('hidden');
-        
+
         resultMessage.textContent = result.message;
         resultMessage.className = result.correct ? 'correct' : 'incorrect';
         checkBtn.disabled = true;
@@ -293,19 +291,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Обработчик нажатия кнопки "Следующий раунд"
-    nextBtn.addEventListener('click', function() {
+    nextBtn.addEventListener('click', function () {
         startNewRound();
         scrollToFunctionVector();
     });
 
     // Обработчик переключения вкладок
     tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             const tabId = this.getAttribute('data-tab');
-            
+
             tabs.forEach(t => t.classList.remove('active'));
             this.classList.add('active');
-            
+
             tabContents.forEach(content => {
                 content.classList.remove('active');
                 if (content.id === `${tabId}-tab`) {
