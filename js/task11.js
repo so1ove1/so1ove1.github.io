@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     const functionVectors = document.getElementById('function-vectors');
     const membershipTable = document.getElementById('membership-table');
@@ -50,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function checksM(vector) {
         const n = Math.log2(vector.length);
         for (let i = 0; i < vector.length; i++) {
-            for (let j = i + 1; j < vector.length; j++) {
+            for (let j = 0; j < vector.length; j++) {
                 if (isLessOrEqual(i, j, n) && vector[i] > vector[j]) {
                     return false;
                 }
@@ -61,8 +62,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Вспомогательная функция для проверки отношения порядка между наборами
     function isLessOrEqual(i, j, n) {
+        // Преобразуем индексы в двоичное представление
         const binary1 = i.toString(2).padStart(n, '0');
         const binary2 = j.toString(2).padStart(n, '0');
+        
+        // Проверяем, что каждый бит в binary1 меньше или равен соответствующему биту в binary2
         for (let k = 0; k < n; k++) {
             if (binary1[k] > binary2[k]) {
                 return false;
@@ -74,27 +78,36 @@ document.addEventListener('DOMContentLoaded', function () {
     // Функция для проверки линейности (L)
     function checksL(vector) {
         const n = vector.length;
-        const coefficients = new Array(n).fill(0);
-
-        // Инициализация коэффициентов
-        for (let i = 0; i < n; i++) {
-            coefficients[i] = parseInt(vector[i]);
-        }
-
-        for (let i = 1; i < n; i++) {
-            let sum = 0;
-            const binary = i.toString(2).padStart(Math.log2(n), '0');
-
-            for (let j = 0; j < binary.length; j++) {
-                if (binary[j] === '1') {
-                    sum ^= coefficients[Math.pow(2, j)];
+        const log2n = Math.log2(n);
+        
+        // Для линейной функции должна быть возможность представить её в виде
+        // f(x1,x2,...,xn) = a0 ⊕ a1x1 ⊕ a2x2 ⊕ ... ⊕ anxn ⊕ a12x1x2 ⊕ ...
+        
+        // Проверяем через преобразование Жегалкина
+        // Используем метод треугольника (метод Мёбиуса)
+        let coefficients = [...vector].map(bit => parseInt(bit));
+        
+        // Вычисляем коэффициенты методом треугольника
+        for (let i = 0; i < log2n; i++) {
+            for (let j = 0; j < n; j++) {
+                if (j & (1 << i)) {
+                    coefficients[j] = (coefficients[j] ^ coefficients[j ^ (1 << i)]);
                 }
             }
-
-            if (sum !== parseInt(vector[i])) {
+        }
+        
+        // Проверяем, соответствуют ли коэффициенты линейной функции
+        // Для линейной функции должны быть ненулевыми только коэффициенты при x0, x1, x2, ..., xn
+        for (let i = 0; i < n; i++) {
+            // Проверяем, является ли число i степенью двойки или нулем
+            // Это соответствует одночленам x0, x1, x2, ..., xn
+            const isPowerOfTwoOrZero = i === 0 || (i & (i - 1)) === 0;
+            
+            if (!isPowerOfTwoOrZero && coefficients[i] !== 0) {
                 return false;
             }
         }
+        
         return true;
     }
 
@@ -110,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const classes = new Set();
 
-        // Если функция не принадлежит ни одному замкнутому классу, она полная
+        // Если функция принадлежит хотя бы одному замкнутому классу
         const belongsToAnyClass = Object.values(belongsTo).some(belongs => belongs);
 
         if (!belongsToAnyClass) {
@@ -183,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Обработчик нажатия кнопки проверки
     checkBtn.addEventListener('click', function () {
+        checkBtn.disabled = true;
         const selectedClasses = new Set();
         checkboxes.forEach(checkbox => {
             if (checkbox.checked) {
@@ -233,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Обработчик кнопки "Следующий раунд"
     nextBtn.addEventListener('click', function () {
         startNewRound();
+        checkBtn.disabled = false;
         document.getElementById('stat-container').scrollIntoView({ behavior: 'smooth' });
     });
 
