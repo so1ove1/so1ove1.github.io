@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const key = document.createElement('button');
         key.className = 'key';
         key.textContent = symbol;
-        key.onclick = () => insertAtCursor(inputCnf, symbol);
+        key.onclick = () => insertAtCursor(inputDnf, symbol);
         keysGroup.appendChild(key);
     });
 
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const key = document.createElement('button');
         key.className = 'key';
         key.textContent = `x${i}`;
-        key.onclick = () => insertAtCursor(inputCnf, `x${i}`);
+        key.onclick = () => insertAtCursor(inputDnf, `x${i}`);
         keysGroup.appendChild(key);
     }
 
