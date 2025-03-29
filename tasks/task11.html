@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boolca - Полные системы булевых функций</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/task11.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/index.html" class="logo"><span>Boolca</span></a>
+            <nav class="desktop-nav">
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/index.html">Главная</a>
+                <a href="/index.html#tasks">Задачи</a>
+                <a href="">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="binary-background"></div>
+            <div class="container">
+                <h1>Полные системы булевых функций</h1>
+                <p>Задача 11: Определите, является ли система булевых функций полной. Если система неполна, укажите замкнутые классы, которым она принадлежит.</p>
+            </div>
+        </section>
+
+        <section class="container" style="padding: 2rem 0 4rem;">
+            <div class="task-container">
+                <h2 class="task-title">Полнота системы функций</h2>
+                <p class="task-description">Проанализируйте предложенный набор функций и определите его полноту.</p>
+
+                <div class="info-box">
+                    <h4>Информация</h4>
+                    <p>Система булевых функций называется полной, если с помощью суперпозиции этих функций можно получить любую булеву функцию.</p>
+                    <p>Замкнутые классы:</p>
+                    <ul>
+                        <li>T0 - функции, сохраняющие 0</li>
+                        <li>T1 - функции, сохраняющие 1</li>
+                        <li>S - самодвойственные функции</li>
+                        <li>M - монотонные функции</li>
+                        <li>L - линейные функции</li>
+                    </ul>
+                </div>
+
+                <div id="stat-container" class="stat-container">
+                    <div class="stat correct">
+                        Верно: <span id="correct-count">0</span>
+                    </div>
+                    <div class="stat total">
+                        Всего: <span id="total-count">0</span>
+                    </div>
+                </div>
+
+                <div class="function-display">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="vectors">Векторы функций</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="vectors-tab">
+                        <div class="result-box">
+                            <div id="function-vectors"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-section">
+                    <h3>Выберите замкнутые классы, которым принадлежит система:</h3>
+                    <div class="answer-options">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" value="complete">
+                            <span class="checkbox-label">
+                                <span class="checkmark"></span>
+                                Полная система
+                            </span>
+                        </label>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" value="T0">
+                            <span class="checkbox-label">
+                                <span class="checkmark"></span>
+                                T0
+                            </span>
+                        </label>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" value="T1">
+                            <span class="checkbox-label">
+                                <span class="checkmark"></span>
+                                T1
+                            </span>
+                        </label>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" value="S">
+                            <span class="checkbox-label">
+                                <span class="checkmark"></span>
+                                S
+                            </span>
+                        </label>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" value="M">
+                            <span class="checkbox-label">
+                                <span class="checkmark"></span>
+                                M
+                            </span>
+                        </label>
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" value="L">
+                            <span class="checkbox-label">
+                                <span class="checkmark"></span>
+                                L
+                            </span>
+                        </label>
+                    </div>
+                    <button id="check-btn" class="check-button">Проверить</button>
+                </div>
+
+                <div class="action-buttons">
+                    <div id="result-container" class="hidden">
+                        <div id="result-message"></div>
+                        <div class="result-box">
+                            <div id="explanation-content"></div>
+                            <table class="membership-table" id="membership-table"></table>
+                        </div>
+                        <button class="btn-next" id="next-btn">Следующий раунд</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Boolca - это учебный проект, разработанный для изучения булевых функций.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/js/task11.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+</html>
