@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return terms.join(' ∨ ');
     }
 
-    // Функция для генерации таблицы истинности
+    // Функция для генерации таблицы функции
     function generateTruthTable(vector) {
         const varsCount = getVariablesCount(vector.length);
         truthTable.innerHTML = '';
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
         errorVector.style.display = 'none';
         resultContainer.style.display = 'block';
 
-        // Строим СДНФ и таблицу истинности
+        // Строим СДНФ и таблицу функции
         const pdnf = buildPDNF(vector);
         pdnfResult.textContent = pdnf;
         generateTruthTable(vector);
