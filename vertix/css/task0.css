@@ -1,0 +1,189 @@
+/* Task content */
+.task-content {
+    padding: 2rem 0 4rem;
+}
+
+/* Matrix input styles */
+.matrix-input-container {
+    background-color: var(--card);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.input-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-size: 1rem;
+    color: var(--foreground);
+}
+
+.input-group input {
+    width: 80px;
+    padding: 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: "Ubuntu Mono", monospace;
+}
+
+.matrix-container {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.hint {
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+}
+
+.matrix-table {
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.matrix-table th {
+    background-color: rgba(59, 130, 246, 0.1);
+    padding: 0.5rem;
+    color: var(--foreground);
+    font-weight: bold;
+}
+
+.matrix-table td {
+    padding: 0;
+    border: 1px solid var(--border);
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+.matrix-cell {
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    font-family: "Ubuntu Mono", monospace;
+    font-size: 1rem;
+    padding: 0;
+    cursor: pointer;
+    background-color: var(--card);
+    transition: background-color 0.2s ease;
+}
+
+.matrix-cell.active {
+    background-color: rgba(59, 130, 246, 0.2);
+}
+
+.matrix-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* Results container */
+.results-container {
+    background-color: var(--card);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.results-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--foreground);
+}
+
+.hidden {
+    display: none;
+}
+
+/* Graph info cards */
+.graph-info {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.info-card {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    box-shadow: 0 2px 5px var(--shadow);
+}
+
+.info-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+.result-content {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.result-content ul {
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.result-content .tag {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.tag.positive {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #065f46;
+}
+
+.tag.negative {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #b91c1c;
+}
+
+.tag.neutral {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #1e40af;
+}
+
+@media (min-width: 768px) {
+    .graph-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .task-header h1 {
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .graph-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

@@ -1,0 +1,469 @@
+/**
+ * Класс Graph
+ */
+class Graph {
+    /**
+ * Creates an instance of Graph.
+ *
+ * @constructor
+ * @param {number} [size=0] 
+ */
+    constructor(size = 0) {
+        this.size = size;
+        this.adjacencyMatrix = Array(size).fill().map(() => Array(size).fill(0));
+        this.canvas = null;
+        this.ctx = null;
+        this.nodeRadius = 20;
+        this.nodePositions = [];
+        this.colors = {
+            node: '#3b82f6',
+            edge: '#1e40af',
+            text: '#ffffff',
+            highlight: '#ef4444',
+            bipartiteSet1: '#3b82f6',
+            bipartiteSet2: '#f97316',
+            connected: ['#3b82f6', '#f97316', '#10b981', '#8b5cf6', '#f59e0b']
+        };
+    }
+
+    /**
+     * Создать матрицу смежности заданного размера
+     * @param {number} size - Размер матрицы
+     * @returns {Array} Матрица смежности
+     */
+    createAdjacencyMatrix(size) {
+        return Array(size).fill().map(() => Array(size).fill(0));
+    }
+
+    /**
+     * Создать матрицу инцидентности заданного размера
+     * @param {number} vertices - Количество вершин
+     * @returns {Array} Матрица инцидентности
+     */
+    createIncidenceMatrix(vertices) {
+        const maxEdges = (vertices * (vertices - 1)) / 2;
+        return Array(vertices).fill().map(() => Array(maxEdges).fill(0));
+    }
+
+    /**
+     * Создать списки смежности заданного размера
+     * @param {number} size - Количество вершин
+     * @returns {Array} Списки смежности
+     */
+    createAdjacencyLists(size) {
+        return Array(size).fill().map(() => []);
+    }
+
+    /**
+     * Преобразовать матрицу инцидентности в матрицу смежности
+     * @param {Array} incMatrix - Матрица инцидентности
+     * @returns {Array} Матрица смежности
+     */
+    incidenceToAdjacency(incMatrix) {
+        const vertices = incMatrix.length;
+        const adjMatrix = this.createAdjacencyMatrix(vertices);
+
+        for (let e = 0; e < incMatrix[0].length; e++) {
+            const connectedVertices = [];
+            for (let v = 0; v < vertices; v++) {
+                if (incMatrix[v][e] === 1) {
+                    connectedVertices.push(v);
+                }
+            }
+            if (connectedVertices.length === 2) {
+                const [v1, v2] = connectedVertices;
+                adjMatrix[v1][v2] = 1;
+                adjMatrix[v2][v1] = 1;
+            }
+        }
+
+        return adjMatrix;
+    }
+
+    /**
+     * Преобразовать списки смежности в матрицу смежности
+     * @param {Array} lists - Списки смежности
+     * @returns {Array} Матрица смежности
+     */
+    listsToAdjacency(lists) {
+        const size = lists.length;
+        const adjMatrix = this.createAdjacencyMatrix(size);
+
+        lists.forEach((neighbors, vertex) => {
+            neighbors.forEach(neighbor => {
+                adjMatrix[vertex][neighbor] = 1;
+                adjMatrix[neighbor][vertex] = 1;
+            });
+        });
+
+        return adjMatrix;
+    }
+
+    /**
+     * Загрузить граф из матрицы смежности
+     * @param {Array} matrix - 2D массив, представляющий матрицу смежности
+     */
+    loadFromAdjacencyMatrix(matrix) {
+        this.size = matrix.length;
+        this.adjacencyMatrix = JSON.parse(JSON.stringify(matrix));
+        this.calculateNodePositions();
+        return this;
+    }
+
+    /**
+     * Загрузить граф из матрицы инцидентности
+     * @param {Array} matrix - 2D массив, представляющий матрицу инцидентности
+     */
+    loadFromIncidenceMatrix(matrix) {
+        const adjMatrix = this.incidenceToAdjacency(matrix);
+        return this.loadFromAdjacencyMatrix(adjMatrix);
+    }
+
+    /**
+     * Загрузить граф из списков смежности
+     * @param {Array} lists - Массив списков смежности для каждой вершины
+     */
+    loadFromAdjacencyLists(lists) {
+        const adjMatrix = this.listsToAdjacency(lists);
+        return this.loadFromAdjacencyMatrix(adjMatrix);
+    }
+
+    /**
+     * Рассчитать позиции вершин в круговой компоновке
+     */
+    calculateNodePositions() {
+        this.nodePositions = [];
+        const centerX = this.canvas ? this.canvas.width / 2 : 200;
+        const centerY = this.canvas ? this.canvas.height / 2 : 200;
+        const radius = Math.min(centerX, centerY) - this.nodeRadius - 10;
+
+        for (let i = 0; i < this.size; i++) {
+            const angle = (i * 2 * Math.PI / this.size) - Math.PI / 2;
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+            this.nodePositions.push({ x, y });
+        }
+    }
+
+    /**
+     * Установить холст для рендеринга
+     * @param {HTMLCanvasElement} canvas - Элемент холста для рендеринга
+     */
+    setCanvas(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.calculateNodePositions();
+        return this;
+    }
+
+    /**
+     * Нарисовать граф на холсте
+     */
+    draw() {
+        if (!this.ctx) return;
+
+        // Очистить холст
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Нарисовать ребра
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.adjacencyMatrix[i][j] === 1) {
+                    this.drawEdge(i, j);
+                }
+            }
+        }
+
+        // Нарисовать вершины
+        for (let i = 0; i < this.size; i++) {
+            this.drawNode(i);
+        }
+    }
+
+    /**
+     * Нарисовать вершину на холсте
+     * @param {number} index - Индекс вершины
+     * @param {string} color - Опциональное переопределение цвета
+     */
+    drawNode(index, color = null) {
+        const pos = this.nodePositions[index];
+
+        // Нарисовать круг
+        this.ctx.beginPath();
+        this.ctx.arc(pos.x, pos.y, this.nodeRadius, 0, 2 * Math.PI);
+        this.ctx.fillStyle = color || this.colors.node;
+        this.ctx.fill();
+        this.ctx.strokeStyle = '#1d4ed8';
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+
+        // Нарисовать метку
+        this.ctx.fillStyle = this.colors.text;
+        this.ctx.font = '14px Ubuntu Mono, monospace';
+        this.ctx.textAlign = 'center';
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText(index + 1, pos.x, pos.y);
+    }
+
+    /**
+     * Нарисовать ребро между двумя вершинами
+     * @param {number} from - Индекс исходной вершины
+     * @param {number} to - Индекс целевой вершины
+     * @param {string} color - Опциональное переопределение цвета
+     */
+    drawEdge(from, to, color = null) {
+        const fromPos = this.nodePositions[from];
+        const toPos = this.nodePositions[to];
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(fromPos.x, fromPos.y);
+        this.ctx.lineTo(toPos.x, toPos.y);
+        this.ctx.strokeStyle = color || this.colors.edge;
+        this.ctx.lineWidth = 2;
+        this.ctx.stroke();
+    }
+
+    /**
+     * Рассчитать степень каждой вершины
+     * @returns {Array} Массив степеней для каждой вершины
+     */
+    calculateDegrees() {
+        const degrees = Array(this.size).fill(0);
+
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.adjacencyMatrix[i][j] === 1) {
+                    degrees[i]++;
+                }
+            }
+        }
+
+        return degrees;
+    }
+
+    /**
+     * Найти компоненты связности с помощью DFS
+     * @returns {Array} Массив компонент, каждая содержит индексы вершин
+     */
+    findConnectedComponents() {
+        const visited = Array(this.size).fill(false);
+        const components = [];
+
+        for (let i = 0; i < this.size; i++) {
+            if (!visited[i]) {
+                const component = [];
+                this._dfs(i, visited, component);
+                components.push(component);
+            }
+        }
+
+        return components;
+    }
+
+    /**
+     * Вспомогательная функция поиска в глубину
+     * @param {number} vertex - Текущая вершина для исследования
+     * @param {Array} visited - Массив, отслеживающий посещенные вершины
+     * @param {Array} component - Текущая формируемая компонента
+     */
+    _dfs(vertex, visited, component) {
+        visited[vertex] = true;
+        component.push(vertex);
+
+        for (let i = 0; i < this.size; i++) {
+            if (this.adjacencyMatrix[vertex][i] === 1 && !visited[i]) {
+                this._dfs(i, visited, component);
+            }
+        }
+    }
+
+    /**
+     * Проверить, является ли граф Эйлеровым или полу-Эйлеровым
+     * @returns {Object} Объект, содержащий свойства Эйлеровости
+     */
+    isEulerian() {
+        // Получить степени вершин
+        const degrees = this.calculateDegrees();
+
+        // Проверить компоненты связности для несвязного графа
+        const components = this.findConnectedComponents();
+
+        // Если более одной компоненты с ребрами, не Эйлеров
+        let componentsWithEdges = 0;
+        for (const component of components) {
+            if (component.length > 1) {
+                componentsWithEdges++;
+            }
+        }
+
+        if (componentsWithEdges > 1) {
+            return { isEulerian: false, isSemiEulerian: false, reason: "Граф несвязный" };
+        }
+
+        // Подсчитать вершины с нечетной степенью
+        const oddDegreeCount = degrees.filter(deg => deg % 2 !== 0).length;
+
+        if (oddDegreeCount === 0) {
+            return { isEulerian: true, isSemiEulerian: false, reason: "Все вершины имеют четную степень" };
+        } else if (oddDegreeCount === 2) {
+            return { isEulerian: false, isSemiEulerian: true, reason: "Ровно две вершины имеют нечетную степень" };
+        } else {
+            return { isEulerian: false, isSemiEulerian: false, reason: `${oddDegreeCount} вершин(а) имеют нечетную степень` };
+        }
+    }
+
+    /**
+     * Вспомогательная функция для инвертирования цвета в проверке двудольности
+     * @param {number} color - Текущий цвет (1 или 2)
+     * @returns {number} Инвертированный цвет
+     */
+    _invertColor(color) {
+        return color === 1 ? 2 : 1;
+    }
+
+    /**
+     * Вспомогательная функция DFS для проверки двудольности
+     * @param {number} vertex - Текущая вершина
+     * @param {Array} colors - Массив цветов вершин
+     * @param {number} currentColor - Текущий цвет для покраски
+     * @returns {boolean} true если часть графа двудольная, false иначе
+     */
+    _dfsCheckBipartite(vertex, colors, currentColor) {
+        colors[vertex] = currentColor;
+
+        for (let i = 0; i < this.size; i++) {
+            if (this.adjacencyMatrix[vertex][i] === 1) {
+                if (colors[i] === 0) {
+                    if (!this._dfsCheckBipartite(i, colors, this._invertColor(currentColor))) {
+                        return false;
+                    }
+                } else if (colors[i] === currentColor) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Проверить, является ли граф двудольным
+     * @returns {Object} Объект, содержащий свойства двудольности и раскраску
+     */
+    isBipartite() {
+        if (this.size === 0) return { isBipartite: false, reason: "Граф пуст" };
+
+        // Массив цветов: 0 - не раскрашен, 1 - первый цвет, 2 - второй цвет
+        const colors = Array(this.size).fill(0);
+        const sets = [[], []]; // Два множества вершин
+        let isBipartite = true;
+
+        // Проверяем каждую компоненту связности
+        for (let i = 0; i < this.size; i++) {
+            if (colors[i] === 0) {
+                if (!this._dfsCheckBipartite(i, colors, 1)) {
+                    isBipartite = false;
+                    break;
+                }
+            }
+        }
+
+        // Если граф двудольный, формируем множества
+        if (isBipartite) {
+            for (let i = 0; i < this.size; i++) {
+                sets[colors[i] - 1].push(i);
+            }
+
+            // Проверяем, является ли граф полным двудольным
+            let isCompleteBipartite = true;
+            for (const v1 of sets[0]) {
+                for (const v2 of sets[1]) {
+                    if (this.adjacencyMatrix[v1][v2] !== 1) {
+                        isCompleteBipartite = false;
+                        break;
+                    }
+                }
+                if (!isCompleteBipartite) break;
+            }
+
+            return {
+                isBipartite: true,
+                isCompleteBipartite,
+                sets,
+                colors: colors.map(c => c === 1 ? 0 : 1), // Преобразуем цвета в формат 0/1 для совместимости
+                reason: isCompleteBipartite ? "Полный двудольный граф" : "Двудольный граф"
+            };
+        }
+
+        return {
+            isBipartite: false,
+            sets: null,
+            colors: null,
+            reason: "Граф не является двудольным"
+        };
+    }
+
+    /**
+     * Нарисовать граф с выделенными компонентами связности
+     * @param {Array} components - Компоненты связности
+     */
+    drawConnectedComponents(components) {
+        if (!this.ctx) return;
+
+        // Очистить холст
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Нарисовать ребра внутри компонент
+        for (let c = 0; c < components.length; c++) {
+            const component = components[c];
+            const color = this.colors.connected[c % this.colors.connected.length];
+
+            for (let i of component) {
+                for (let j of component) {
+                    if (this.adjacencyMatrix[i][j] === 1) {
+                        this.drawEdge(i, j, color);
+                    }
+                }
+            }
+        }
+
+        // Нарисовать вершины
+        for (let c = 0; c < components.length; c++) {
+            const component = components[c];
+            const color = this.colors.connected[c % this.colors.connected.length];
+
+            for (let i of component) {
+                this.drawNode(i, color);
+            }
+        }
+    }
+
+    /**
+     * Нарисовать граф с выделенными множествами двудольного графа
+     * @param {Object} bipartiteResult - Результат метода isBipartite
+     */
+    drawBipartiteGraph(bipartiteResult) {
+        if (!this.ctx || !bipartiteResult.isBipartite) return;
+
+        // Очистить холст
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Нарисовать ребра
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.adjacencyMatrix[i][j] === 1) {
+                    this.drawEdge(i, j);
+                }
+            }
+        }
+
+        // Нарисовать вершины с цветами двудольности
+        for (let i = 0; i < this.size; i++) {
+            const color = bipartiteResult.colors[i] === 0 ?
+                this.colors.bipartiteSet1 : this.colors.bipartiteSet2;
+            this.drawNode(i, color);
+        }
+    }
+}
+
+export default Graph;
