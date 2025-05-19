@@ -1,0 +1,147 @@
+/* Task 4 specific styles - BFS traversal */
+.bfs-highlight {
+  animation: pulse-highlight 0.8s ease-in-out;
+}
+
+@keyframes pulse-highlight {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* Sequence level visualization */
+.sequence-level-container {
+  margin-top: 1rem;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+.level-visualization {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.level-row {
+  display: flex;
+  align-items: center;
+}
+
+.level-label {
+  min-width: 80px;
+  font-weight: bold;
+}
+
+.level-vertices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Queue visualization styles */
+.queue-visualization {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(80, 70, 229, 0.1);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.queue-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.queue-label {
+  font-weight: bold;
+  min-width: 70px;
+}
+
+.queue-items {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.queue-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: rgba(99, 102, 241, 0.2);
+  padding: 0.25rem 0.5rem;
+  position: relative;
+}
+
+.queue-item:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  right: -12px;
+  color: var(--muted);
+}
+
+/* Distance labels for BFS visualization */
+.distance-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.distance-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.distance-node {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+}
+
+.distance-info {
+  font-size: 0.9rem;
+}
+
+/* Animation for level transitions */
+@keyframes level-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.level-animation {
+  animation: level-fade-in 0.4s ease-out forwards;
+}
+
+/* Highlight current level in the visualization */
+.current-level {
+  border-left: 3px solid #10b981;
+  padding-left: 6px;
+  background-color: rgba(16, 185, 129, 0.1);
+}
