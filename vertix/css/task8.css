@@ -1,66 +1,80 @@
-/* Task 8 specific styles */
+/* Task 8 - Shortest Paths styles */
 
-/* Weight input */
-.weight-input {
-    width: 40px;
-    height: 24px;
-    padding: 0 4px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    text-align: center;
-    font-family: "Ubuntu Mono", monospace;
-}
-
-/* Matrix cell with weight */
-.matrix-cell.active {
+/* Matrix styles for weighted representation */
+.matrix-cell.weighted {
     position: relative;
-}
-
-.matrix-cell .weight-indicator {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background-color: var(--accent);
-    color: white;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Weight controls */
-.weights-controls {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-    justify-content: center;
-}
-
-.weights-controls .input-group {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.weights-controls #enable-weights {
-    width: 1rem;
-    height: 1rem;
-    cursor: pointer;
-}
-
-.weights-controls #default-weight {
-    width: 60px;
-    padding: 0.25rem;
+    width: 3rem;
+    height: 2rem;
+    padding: 0;
     border: 1px solid var(--border);
-    border-radius: 4px;
+    background-color: var(--background);
     text-align: center;
+    font-family: 'Ubuntu Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Shortest paths results */
-.shortest-paths-result {
+.matrix-cell.weighted:focus {
+    outline: 2px solid var(--accent);
+}
+
+.weight-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0.25rem;
+    text-align: center;
+    font-family: 'Ubuntu Mono', monospace;
+    background-color: transparent;
+}
+
+/* Paths specific styles */
+.paths-info {
+    margin: 2rem 0;
+}
+
+.paths-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.paths-controls button {
+    padding: 0.75rem 1.5rem;
+    min-width: 120px;
+}
+
+.paths-status {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.paths-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background-color: var(--background);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border);
+}
+
+.paths-result {
     background-color: var(--card);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -68,132 +82,171 @@
     margin-bottom: 2rem;
 }
 
-.shortest-paths-result h3 {
+.paths-result h3 {
     text-align: center;
     margin-bottom: 1rem;
     color: var(--accent);
     font-size: 1.5rem;
 }
 
-.paths-table-container {
-    overflow-x: auto;
-    margin-top: 1rem;
-}
-
-.paths-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: "Ubuntu Mono", monospace;
-}
-
-.paths-table th,
-.paths-table td {
-    border: 1px solid var(--border);
-    padding: 0.75rem;
-    text-align: center;
-}
-
-.paths-table th {
+.shortest-paths {
+    padding: 1rem;
     background-color: var(--background);
+    border-radius: 6px;
+}
+
+.shortest-paths p {
+    margin-bottom: 0.5rem;
     font-weight: bold;
-    color: var(--foreground);
 }
 
-.paths-table tr:nth-child(even) {
-    background-color: rgba(59, 130, 246, 0.05);
+.shortest-paths ul {
+    list-style-type: none;
+    padding: 0;
 }
 
-.paths-table tr:hover {
-    background-color: rgba(59, 130, 246, 0.1);
+.shortest-paths li {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
 }
 
-.path-highlight {
+.shortest-paths li:last-child {
+    border-bottom: none;
+}
+
+.shortest-paths li .path-distance {
     font-weight: bold;
-    color: #8b5cf6;
-    transition: all 0.3s ease;
+    color: var(--accent);
 }
 
-.infinity {
-    color: var(--muted);
-    font-style: italic;
-}
-
-/* Edge weights on graph */
-.edge-weight {
-    font-size: 12px;
+.edge-label {
+    position: absolute;
+    font-size: 0.9rem;
     font-weight: bold;
-    color: var(--foreground);
     background-color: rgba(255, 255, 255, 0.8);
-    padding: 2px 4px;
-    border-radius: 3px;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
     pointer-events: none;
+}
+
+/* Animation for edge selection */
+@keyframes highlight-edge {
+    0% {
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dashoffset: 20;
+    }
+}
+
+.edge-selecting {
+    stroke-dasharray: 5, 5;
+    animation: highlight-edge 1s linear infinite;
+}
+
+/* Animation for path finding */
+@keyframes path-found {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.path-found {
+    animation: path-found 0.5s ease-out;
 }
 
 /* Start vertex selection */
 .start-vertex-selection {
-    margin-top: 1rem;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .start-vertex-selection label {
-    margin-right: 0.5rem;
+    color: var(--foreground);
 }
 
 .start-vertex-selection select {
     padding: 0.5rem;
     border-radius: 4px;
     border: 1px solid var(--border);
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: 'Ubuntu Mono', monospace;
 }
 
-/* Animations */
-@keyframes pulse-path {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 0 5px rgba(139, 92, 246, 0);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
-    }
+/* Speed control */
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.current-path {
-    animation: pulse-path 1.5s infinite;
+.speed-control label {
+    color: var(--foreground);
 }
 
-@keyframes distance-update {
-    0% {
-        transform: scale(1);
-        color: var(--foreground);
-    }
-    50% {
-        transform: scale(1.2);
-        color: #10b981;
-    }
-    100% {
-        transform: scale(1);
-        color: var(--foreground);
-    }
+.speed-control input {
+    width: 100px;
 }
 
-.distance-updated {
-    animation: distance-update 1s ease;
+/* Status items */
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+
+.status-item .label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+}
+
+.status-item .value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--foreground);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .paths-table th,
-    .paths-table td {
-        padding: 0.5rem;
-        font-size: 0.9rem;
+    .paths-controls {
+        flex-direction: column;
+        align-items: stretch;
     }
-    
-    .weights-controls {
+
+    .paths-status {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+    }
+
+    .paths-legend {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .matrix-cell.weighted {
+        width: 2.5rem;
+        height: 1.8rem;
+    }
+
+    .start-vertex-selection {
+        width: 100%;
+        justify-content: center;
     }
 }

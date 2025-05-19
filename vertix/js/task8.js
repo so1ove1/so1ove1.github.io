@@ -1,94 +1,63 @@
+import Graph from '/vertix/js/graph.js';
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Basic elements
+    // DOM Elements
     const matrixSizeInput = document.getElementById('matrix-size');
-    const graphRepresentationSelect = document.getElementById('graph-representation');
     const generateMatrixBtn = document.getElementById('generate-matrix');
     const resetMatrixBtn = document.getElementById('reset-matrix');
     const loadExampleBtn = document.getElementById('load-example');
-    const calculatePathsBtn = document.getElementById('calculate-paths');
+    const findPathsBtn = document.getElementById('find-paths');
     const matrixContainer = document.getElementById('matrix-container');
     const resultsContainer = document.getElementById('results-container');
     const graphCanvas = document.getElementById('graph-canvas');
-    
-    // Weighted graph controls
-    const enableWeightsCheckbox = document.getElementById('enable-weights');
-    const defaultWeightInput = document.getElementById('default-weight');
-    
-    // Algorithm controls
-    const startAlgorithmBtn = document.getElementById('start-algorithm');
-    const stepAlgorithmBtn = document.getElementById('step-algorithm');
-    const restartAlgorithmBtn = document.getElementById('restart-algorithm');
+
+    // Dijkstra Controls
+    const startVertexSelect = document.getElementById('start-vertex');
+    const startDijkstraBtn = document.getElementById('start-dijkstra');
+    const stepDijkstraBtn = document.getElementById('step-dijkstra');
+    const restartDijkstraBtn = document.getElementById('restart-dijkstra');
     const animationSpeedInput = document.getElementById('animation-speed');
     const currentStepEl = document.getElementById('current-step');
     const currentVertexEl = document.getElementById('current-vertex');
-    const verticesProcessedEl = document.getElementById('vertices-processed');
-    
-    // Results table
-    const shortestPathsTable = document.getElementById('shortest-paths-table').querySelector('tbody');
-    
-    // State variables
+    const currentDistanceEl = document.getElementById('current-distance');
+    const pathsList = document.getElementById('paths-list');
+
+    // State Variables
     let graph = null;
     let matrixSize = 5;
-    let representation = 'adjacency';
     let matrixData = [];
     let weightMatrix = [];
-    let algorithmInterval = null;
+    let dijkstraInterval = null;
     let animationSpeed = 5;
-    let useWeights = true;
-    let defaultWeight = 1;
-    
-    let algorithmState = {
+    let dijkstraState = {
         distances: [],
         previous: [],
-        unvisited: [],
         visited: [],
         currentVertex: null,
-        evaluatingEdge: null,
+        startVertex: 0,
         step: 0,
         isRunning: false,
-        isComplete: false,
-        startVertex: 0,
-        processedVertices: 0
+        complete: false
     };
-    
+
     // Initialize Graph
     function initGraph() {
         graph = new Graph(matrixSize);
         graph.setCanvas(graphCanvas);
     }
-    
-    // Create matrix input UI
+
+    // Create Matrix Input UI
     function createMatrixInput() {
         matrixContainer.innerHTML = '';
         matrixData = [];
         weightMatrix = [];
         
-        useWeights = enableWeightsCheckbox.checked;
-        defaultWeight = parseInt(defaultWeightInput.value) || 1;
-        
-        if (representation === 'adjacency') {
-            createAdjacencyMatrixUI();
-        } else if (representation === 'incidence') {
-            createIncidenceMatrixUI();
-        } else if (representation === 'lists') {
-            createAdjacencyListsUI();
-        }
-        
-        resetMatrixBtn.disabled = false;
-        calculatePathsBtn.disabled = false;
-    }
-    
-    // Create adjacency matrix UI
-    function createAdjacencyMatrixUI() {
-        matrixData = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
-        weightMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(defaultWeight));
-        
         const table = document.createElement('table');
         table.className = 'matrix-table';
         
-        // Header row
+        // Header row with indices
         const headerRow = document.createElement('tr');
-        headerRow.appendChild(document.createElement('th'));
+        headerRow.appendChild(document.createElement('th')); // Empty corner cell
         
         for (let i = 0; i < matrixSize; i++) {
             const th = document.createElement('th');
@@ -102,57 +71,76 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let i = 0; i < matrixSize; i++) {
             const row = document.createElement('tr');
             
+            // Row header (vertex label)
             const th = document.createElement('th');
             th.textContent = i + 1;
             row.appendChild(th);
             
             for (let j = 0; j < matrixSize; j++) {
-                const td = document.createElement('td');
-                
                 if (i === j) {
-                    td.textContent = '0';
-                    td.classList.add('disabled');
+                    // Diagonal cells are disabled (no self-loops)
+                    const td = document.createElement('td');
+                    const input = document.createElement('button');
+                    input.className = 'matrix-cell';
+                    input.textContent = '0';
+                    input.disabled = true;
+                    td.appendChild(input);
                     row.appendChild(td);
                     continue;
                 }
                 
-                const button = document.createElement('button');
-                button.className = 'matrix-cell';
-                button.textContent = '0';
-                button.dataset.row = i;
-                button.dataset.col = j;
+                const td = document.createElement('td');
+                const cellContainer = document.createElement('div');
+                cellContainer.className = 'matrix-cell weighted';
                 
-                button.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'weight-input';
+                input.min = '0';
+                input.max = '99';
+                input.value = '0';
+                input.dataset.row = i;
+                input.dataset.col = j;
+                
+                input.addEventListener('input', function() {
                     const r = parseInt(this.dataset.row);
                     const c = parseInt(this.dataset.col);
+                    const val = parseInt(this.value) || 0;
                     
-                    if (matrixData[r][c] === 0) {
+                    // Update weight and adjacency matrices
+                    if (val > 0) {
                         matrixData[r][c] = 1;
-                        this.textContent = '1';
-                        this.classList.add('active');
+                        matrixData[c][r] = 1; // For undirected graph
+                        weightMatrix[r][c] = val;
+                        weightMatrix[c][r] = val; // For undirected graph
                         
-                        if (useWeights) {
-                            const weight = parseInt(prompt(`Enter weight for edge ${r+1} to ${c+1}:`, defaultWeight));
-                            weightMatrix[r][c] = isNaN(weight) ? defaultWeight : Math.max(1, weight);
-                            
-                            const weightSpan = document.createElement('span');
-                            weightSpan.className = 'weight-indicator';
-                            weightSpan.textContent = weightMatrix[r][c];
-                            this.appendChild(weightSpan);
+                        this.parentElement.classList.add('active');
+                        
+                        // Update symmetric cell
+                        const symmetricInput = document.querySelector(`.weight-input[data-row="${c}"][data-col="${r}"]`);
+                        if (symmetricInput) {
+                            symmetricInput.value = val;
+                            symmetricInput.parentElement.classList.add('active');
                         }
                     } else {
                         matrixData[r][c] = 0;
-                        this.textContent = '0';
-                        this.classList.remove('active');
+                        matrixData[c][r] = 0; // For undirected graph
+                        weightMatrix[r][c] = 0;
+                        weightMatrix[c][r] = 0; // For undirected graph
                         
-                        const weightSpan = this.querySelector('.weight-indicator');
-                        if (weightSpan) {
-                            this.removeChild(weightSpan);
+                        this.parentElement.classList.remove('active');
+                        
+                        // Update symmetric cell
+                        const symmetricInput = document.querySelector(`.weight-input[data-row="${c}"][data-col="${r}"]`);
+                        if (symmetricInput) {
+                            symmetricInput.value = 0;
+                            symmetricInput.parentElement.classList.remove('active');
                         }
                     }
                 });
                 
-                td.appendChild(button);
+                cellContainer.appendChild(input);
+                td.appendChild(cellContainer);
                 row.appendChild(td);
             }
             
@@ -160,552 +148,348 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         matrixContainer.appendChild(table);
+        
+        // Initialize matrices
+        matrixData = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
+        weightMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
+        
+        resetMatrixBtn.disabled = false;
+        findPathsBtn.disabled = false;
     }
-    
-    // Create incidence matrix UI
-    function createIncidenceMatrixUI() {
-        const maxEdges = matrixSize * (matrixSize - 1);
-        matrixData = Array(matrixSize).fill().map(() => Array(maxEdges).fill(0));
-        weightMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(defaultWeight));
-        
-        const hint = document.createElement('p');
-        hint.className = 'hint';
-        hint.textContent = 'For shortest path finding, adjacency matrix is recommended.';
-        matrixContainer.appendChild(hint);
-    }
-    
-    // Create adjacency lists UI
-    function createAdjacencyListsUI() {
-        matrixData = Array(matrixSize).fill().map(() => []);
-        weightMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(defaultWeight));
-        
-        const listContainer = document.createElement('div');
-        listContainer.className = 'adjacency-lists';
-        
-        for (let i = 0; i < matrixSize; i++) {
-            const listRow = document.createElement('div');
-            listRow.className = 'list-row';
-            
-            const vertexLabel = document.createElement('span');
-            vertexLabel.className = 'vertex-label';
-            vertexLabel.textContent = `Vertex ${i + 1}:`;
-            listRow.appendChild(vertexLabel);
-            
-            const listInputContainer = document.createElement('div');
-            listInputContainer.className = 'list-input-container';
-            
-            for (let j = 0; j < matrixSize; j++) {
-                if (i !== j) {
-                    const checkboxContainer = document.createElement('div');
-                    checkboxContainer.className = 'checkbox-container';
-                    
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.id = `v${i}-v${j}`;
-                    checkbox.dataset.from = i;
-                    checkbox.dataset.to = j;
-                    
-                    checkbox.addEventListener('change', function() {
-                        const from = parseInt(this.dataset.from);
-                        const to = parseInt(this.dataset.to);
-                        
-                        if (this.checked) {
-                            if (!matrixData[from].includes(to)) {
-                                matrixData[from].push(to);
-                            }
-                            
-                            if (useWeights) {
-                                const weight = parseInt(prompt(`Enter weight for edge ${from+1} to ${to+1}:`, defaultWeight));
-                                weightMatrix[from][to] = isNaN(weight) ? defaultWeight : Math.max(1, weight);
-                                
-                                const label = document.querySelector(`label[for="v${from}-v${to}"]`);
-                                if (label) {
-                                    label.textContent = `${to + 1} (${weightMatrix[from][to]})`;
-                                }
-                            }
-                        } else {
-                            const index = matrixData[from].indexOf(to);
-                            if (index !== -1) {
-                                matrixData[from].splice(index, 1);
-                            }
-                            
-                            const label = document.querySelector(`label[for="v${from}-v${to}"]`);
-                            if (label) {
-                                label.textContent = `${to + 1}`;
-                            }
-                        }
-                    });
-                    
-                    const label = document.createElement('label');
-                    label.htmlFor = `v${i}-v${j}`;
-                    label.textContent = j + 1;
-                    
-                    checkboxContainer.appendChild(checkbox);
-                    checkboxContainer.appendChild(label);
-                    listInputContainer.appendChild(checkboxContainer);
-                }
-            }
-            
-            listRow.appendChild(listInputContainer);
-            listContainer.appendChild(listRow);
-        }
-        
-        matrixContainer.appendChild(listContainer);
-    }
-    
-    // Load example graph
+
+    // Load Example Graph
     function loadExample() {
-        matrixSize = 5;
-        representation = 'adjacency';
+        matrixSize = 6;
         matrixSizeInput.value = matrixSize;
-        graphRepresentationSelect.value = representation;
         
+        // Create the matrix UI first
         createMatrixInput();
         
-        const exampleMatrix = [
-            [0, 1, 0, 0, 1],
-            [1, 0, 1, 0, 1],
-            [0, 1, 0, 1, 0],
-            [0, 0, 1, 0, 1],
-            [1, 1, 0, 1, 0]
-        ];
-        
+        // Example weighted graph
         const exampleWeights = [
-            [0, 4, 0, 0, 2],
-            [4, 0, 3, 0, 1],
-            [0, 3, 0, 5, 0],
-            [0, 0, 5, 0, 6],
-            [2, 1, 0, 6, 0]
+            [0, 4, 0, 0, 8, 0],
+            [4, 0, 8, 0, 11, 0],
+            [0, 8, 0, 7, 0, 2],
+            [0, 0, 7, 0, 2, 6],
+            [8, 11, 0, 2, 0, 7],
+            [0, 0, 2, 6, 7, 0]
         ];
         
+        // Update the UI and data
         for (let i = 0; i < matrixSize; i++) {
             for (let j = 0; j < matrixSize; j++) {
-                if (i !== j && exampleMatrix[i][j] === 1) {
+                if (exampleWeights[i][j] > 0) {
                     matrixData[i][j] = 1;
                     weightMatrix[i][j] = exampleWeights[i][j];
                     
-                    const cell = document.querySelector(`.matrix-cell[data-row="${i}"][data-col="${j}"]`);
-                    if (cell) {
-                        cell.textContent = '1';
-                        cell.classList.add('active');
-                        
-                        if (useWeights) {
-                            const weightSpan = document.createElement('span');
-                            weightSpan.className = 'weight-indicator';
-                            weightSpan.textContent = weightMatrix[i][j];
-                            cell.appendChild(weightSpan);
-                        }
+                    const input = document.querySelector(`.weight-input[data-row="${i}"][data-col="${j}"]`);
+                    if (input) {
+                        input.value = exampleWeights[i][j];
+                        input.parentElement.classList.add('active');
                     }
                 }
             }
         }
     }
-    
-    // Reset matrix
+
+    // Reset Matrix
     function resetMatrix() {
         matrixContainer.innerHTML = '';
         matrixData = [];
         weightMatrix = [];
         createMatrixInput();
     }
-    
-    // Calculate shortest paths
-    function calculateShortestPaths() {
+
+    // Find Shortest Paths
+    function findPaths() {
         initGraph();
+        graph.loadFromAdjacencyMatrix(matrixData);
         
-        if (representation === 'adjacency') {
-            graph.loadFromAdjacencyMatrix(matrixData);
-        } else if (representation === 'incidence') {
-            graph.loadFromIncidenceMatrix(matrixData);
-        } else if (representation === 'lists') {
-            graph.loadFromAdjacencyLists(matrixData);
+        // Show results container
+        resultsContainer.classList.remove('hidden');
+        
+        // Update start vertex selection
+        startVertexSelect.innerHTML = '';
+        for (let i = 0; i < matrixSize; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i + 1;
+            startVertexSelect.appendChild(option);
         }
         
-        createStartVertexSelection();
-        graph.draw();
+        // Draw the initial graph with weights
+        drawGraphWithWeights();
         
-        extendGraphDrawingForWeights();
+        // Reset Dijkstra state
+        resetDijkstraState();
         
-        resultsContainer.classList.remove('hidden');
-        resetAlgorithmState();
+        // Scroll to results
         resultsContainer.scrollIntoView({ behavior: 'smooth' });
     }
-    
-    // Extend graph drawing for weights
-    function extendGraphDrawingForWeights() {
-        if (!useWeights) return;
-        
-        const originalDrawEdge = graph.drawEdge;
-        
-        graph.drawEdge = function(from, to, color = null) {
-            originalDrawEdge.call(this, from, to, color);
-            
-            if (from !== to && weightMatrix[from][to] > 0) {
-                const fromPos = this.nodePositions[from];
-                const toPos = this.nodePositions[to];
-                
-                const midX = (fromPos.x + toPos.x) / 2;
-                const midY = (fromPos.y + toPos.y) / 2;
-                
-                this.ctx.fillStyle = 'white';
-                this.ctx.beginPath();
-                this.ctx.arc(midX, midY, 10, 0, 2 * Math.PI);
-                this.ctx.fill();
-                
-                this.ctx.fillStyle = '#1e293b';
-                this.ctx.font = 'bold 12px Ubuntu Mono, monospace';
-                this.ctx.textAlign = 'center';
-                this.ctx.textBaseline = 'middle';
-                this.ctx.fillText(weightMatrix[from][to], midX, midY);
-            }
-        };
-        
+
+    // Draw graph with weight labels
+    function drawGraphWithWeights() {
         graph.draw();
-    }
-    
-    // Create start vertex selection
-    function createStartVertexSelection() {
-        let startVertexSelection = document.querySelector('.start-vertex-selection');
         
-        if (!startVertexSelection) {
-            startVertexSelection = document.createElement('div');
-            startVertexSelection.className = 'start-vertex-selection';
-            
-            const label = document.createElement('label');
-            label.htmlFor = 'start-vertex';
-            label.textContent = 'Start vertex:';
-            
-            const select = document.createElement('select');
-            select.id = 'start-vertex';
-            
-            for (let i = 0; i < matrixSize; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i + 1;
-                select.appendChild(option);
-            }
-            
-            select.addEventListener('change', function() {
-                algorithmState.startVertex = parseInt(this.value);
-                resetAlgorithmState();
-            });
-            
-            startVertexSelection.appendChild(label);
-            startVertexSelection.appendChild(select);
-            document.querySelector('.traversal-controls').appendChild(startVertexSelection);
-        } else {
-            const select = startVertexSelection.querySelector('select');
-            select.innerHTML = '';
-            
-            for (let i = 0; i < matrixSize; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.textContent = i + 1;
-                select.appendChild(option);
-            }
-        }
-    }
-    
-    // Reset algorithm state
-    function resetAlgorithmState() {
-        clearInterval(algorithmInterval);
-        
-        algorithmState = {
-            distances: Array(matrixSize).fill(Infinity),
-            previous: Array(matrixSize).fill(null),
-            unvisited: Array.from({ length: matrixSize }, (_, i) => i),
-            visited: [],
-            currentVertex: null,
-            evaluatingEdge: null,
-            step: 0,
-            isRunning: false,
-            isComplete: false,
-            startVertex: algorithmState.startVertex || 0,
-            processedVertices: 0
-        };
-        
-        algorithmState.distances[algorithmState.startVertex] = 0;
-        
-        currentStepEl.textContent = '0';
-        currentVertexEl.textContent = '-';
-        verticesProcessedEl.textContent = '0';
-        
-        updateShortestPathsTable();
-        
-        drawAlgorithmState();
-    }
-    
-    // Update shortest paths table
-    function updateShortestPathsTable() {
-        shortestPathsTable.innerHTML = '';
+        // Add weight labels to edges
+        const ctx = graph.ctx;
         
         for (let i = 0; i < matrixSize; i++) {
-            const row = document.createElement('tr');
-            
-            const vertexCell = document.createElement('td');
-            vertexCell.textContent = i + 1;
-            row.appendChild(vertexCell);
-            
-            const distanceCell = document.createElement('td');
-            distanceCell.id = `distance-${i}`;
-            if (algorithmState.distances[i] === Infinity) {
-                distanceCell.innerHTML = '<span class="infinity">∞</span>';
-            } else {
-                distanceCell.textContent = algorithmState.distances[i];
-            }
-            row.appendChild(distanceCell);
-            
-            const pathCell = document.createElement('td');
-            pathCell.id = `path-${i}`;
-            pathCell.textContent = getPathFromStart(i);
-            row.appendChild(pathCell);
-            
-            shortestPathsTable.appendChild(row);
-        }
-    }
-    
-    // Get path from start to target
-    function getPathFromStart(target) {
-        if (algorithmState.distances[target] === Infinity) {
-            return '-';
-        }
-        
-        const path = [];
-        let current = target;
-        
-        while (current !== null) {
-            path.unshift(current + 1);
-            current = algorithmState.previous[current];
-        }
-        
-        return path.join(' → ');
-    }
-    
-    // Step through algorithm
-    function stepAlgorithm() {
-        if (algorithmState.isComplete || algorithmState.unvisited.length === 0) {
-            stopAlgorithm();
-            algorithmState.isComplete = true;
-            return false;
-        }
-        
-        algorithmState.step++;
-        currentStepEl.textContent = algorithmState.step;
-        
-        if (algorithmState.currentVertex === null) {
-            let minDistance = Infinity;
-            let minVertex = null;
-            
-            for (const vertex of algorithmState.unvisited) {
-                if (algorithmState.distances[vertex] < minDistance) {
-                    minDistance = algorithmState.distances[vertex];
-                    minVertex = vertex;
+            for (let j = i + 1; j < matrixSize; j++) {
+                if (matrixData[i][j] === 1) {
+                    const fromPos = graph.nodePositions[i];
+                    const toPos = graph.nodePositions[j];
+                    
+                    // Calculate midpoint for weight label
+                    const midX = (fromPos.x + toPos.x) / 2;
+                    const midY = (fromPos.y + toPos.y) / 2;
+                    
+                    // Draw weight label with background
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(midX, midY, 12, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.strokeStyle = '#ccc';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    
+                    // Draw weight text
+                    ctx.fillStyle = '#1e293b';
+                    ctx.font = 'bold 12px Ubuntu Mono, monospace';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(weightMatrix[i][j], midX, midY);
                 }
             }
-            
-            if (minDistance === Infinity) {
-                algorithmState.isComplete = true;
-                drawAlgorithmState();
-                return false;
-            }
-            
-            algorithmState.currentVertex = minVertex;
-            currentVertexEl.textContent = minVertex + 1;
-            
-            algorithmState.visited.push(minVertex);
-            algorithmState.unvisited = algorithmState.unvisited.filter(v => v !== minVertex);
-            algorithmState.processedVertices++;
-            verticesProcessedEl.textContent = algorithmState.processedVertices;
-            
-            algorithmState.evaluatingEdge = null;
-            
-            drawAlgorithmState();
-            return true;
         }
-        
-        const currentVertex = algorithmState.currentVertex;
-        let neighborFound = false;
-        
-        for (let neighbor = 0; neighbor < matrixSize; neighbor++) {
-            if (graph.adjacencyMatrix[currentVertex][neighbor] === 1 && 
-                algorithmState.unvisited.includes(neighbor)) {
-                
-                algorithmState.evaluatingEdge = [currentVertex, neighbor];
-                
-                const edgeWeight = useWeights ? weightMatrix[currentVertex][neighbor] : 1;
-                const newDistance = algorithmState.distances[currentVertex] + edgeWeight;
-                
-                if (newDistance < algorithmState.distances[neighbor]) {
-                    algorithmState.distances[neighbor] = newDistance;
-                    algorithmState.previous[neighbor] = currentVertex;
-                    
-                    const distanceCell = document.getElementById(`distance-${neighbor}`);
-                    if (distanceCell) {
-                        distanceCell.textContent = newDistance;
-                        distanceCell.classList.add('distance-updated');
-                        setTimeout(() => {
-                            distanceCell.classList.remove('distance-updated');
-                        }, 1000);
-                    }
-                    
-                    const pathCell = document.getElementById(`path-${neighbor}`);
-                    if (pathCell) {
-                        pathCell.textContent = getPathFromStart(neighbor);
-                    }
-                }
-                
-                neighborFound = true;
-                drawAlgorithmState();
-                break;
-            }
-        }
-        
-        if (!neighborFound) {
-            algorithmState.currentVertex = null;
-            algorithmState.evaluatingEdge = null;
-        }
-        
-        return true;
     }
-    
-    // Draw algorithm state
-    function drawAlgorithmState() {
+
+    // Reset Dijkstra state
+    function resetDijkstraState() {
+        clearInterval(dijkstraInterval);
+        
+        dijkstraState = {
+            distances: Array(matrixSize).fill(Infinity),
+            previous: Array(matrixSize).fill(null),
+            visited: Array(matrixSize).fill(false),
+            currentVertex: parseInt(startVertexSelect.value),
+            startVertex: parseInt(startVertexSelect.value),
+            step: 0,
+            isRunning: false,
+            complete: false
+        };
+        
+        // Set distance to start vertex as 0
+        dijkstraState.distances[dijkstraState.startVertex] = 0;
+        
+        // Update UI
+        currentStepEl.textContent = '0';
+        currentVertexEl.textContent = dijkstraState.startVertex + 1;
+        currentDistanceEl.textContent = '0';
+        pathsList.innerHTML = '<li>Алгоритм не запущен</li>';
+        
+        // Draw initial state
+        drawDijkstraState();
+    }
+
+    // Draw current Dijkstra state
+    function drawDijkstraState() {
         const ctx = graph.ctx;
         ctx.clearRect(0, 0, graph.canvas.width, graph.canvas.height);
         
+        // Draw edges
         for (let i = 0; i < matrixSize; i++) {
-            for (let j = 0; j < matrixSize; j++) {
-                if (graph.adjacencyMatrix[i][j] === 1) {
+            for (let j = i + 1; j < matrixSize; j++) {
+                if (matrixData[i][j] === 1) {
                     let edgeColor = graph.colors.edge;
                     
-                    if (algorithmState.evaluatingEdge && 
-                        ((algorithmState.evaluatingEdge[0] === i && algorithmState.evaluatingEdge[1] === j) ||
-                         (algorithmState.evaluatingEdge[0] === j && algorithmState.evaluatingEdge[1] === i))) {
-                        edgeColor = '#f59e0b';
-                    }
-                    
+                    // Check if edge is part of a shortest path
                     if (isEdgeInShortestPath(i, j)) {
-                        edgeColor = '#8b5cf6';
+                        edgeColor = '#a3e635';
                     }
                     
                     graph.drawEdge(i, j, edgeColor);
+                    
+                    // Draw weight label
+                    const fromPos = graph.nodePositions[i];
+                    const toPos = graph.nodePositions[j];
+                    const midX = (fromPos.x + toPos.x) / 2;
+                    const midY = (fromPos.y + toPos.y) / 2;
+                    
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(midX, midY, 12, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.strokeStyle = '#ccc';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#1e293b';
+                    ctx.font = 'bold 12px Ubuntu Mono, monospace';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(weightMatrix[i][j], midX, midY);
                 }
             }
         }
         
+        // Draw vertices
         for (let i = 0; i < matrixSize; i++) {
             let nodeColor = graph.colors.node;
             
-            if (i === algorithmState.currentVertex) {
+            if (i === dijkstraState.currentVertex) {
                 nodeColor = '#f97316';
-            } else if (algorithmState.visited.includes(i)) {
+            } else if (dijkstraState.visited[i]) {
                 nodeColor = '#10b981';
-            }
-            
-            if (i === algorithmState.startVertex) {
-                const pos = graph.nodePositions[i];
-                ctx.beginPath();
-                ctx.arc(pos.x, pos.y, graph.nodeRadius + 4, 0, 2 * Math.PI);
-                ctx.strokeStyle = '#ef4444';
-                ctx.lineWidth = 2;
-                ctx.stroke();
             }
             
             graph.drawNode(i, nodeColor);
         }
     }
-    
-    // Check if edge is in shortest path
+
+    // Check if edge is part of a shortest path
     function isEdgeInShortestPath(v1, v2) {
+        return (dijkstraState.previous[v2] === v1) || (dijkstraState.previous[v1] === v2);
+    }
+
+    // Get shortest path to vertex
+    function getPath(vertex) {
+        const path = [];
+        let current = vertex;
+        
+        while (current !== null) {
+            path.unshift(current);
+            current = dijkstraState.previous[current];
+        }
+        
+        return path;
+    }
+
+    // Perform one step of Dijkstra's algorithm
+    function stepDijkstra() {
+        if (dijkstraState.complete) {
+            return false;
+        }
+        
+        dijkstraState.step++;
+        currentStepEl.textContent = dijkstraState.step;
+        
+        // Find unvisited vertex with minimum distance
+        let minDistance = Infinity;
+        let minVertex = null;
+        
         for (let i = 0; i < matrixSize; i++) {
-            if (algorithmState.distances[i] === Infinity) continue;
+            if (!dijkstraState.visited[i] && dijkstraState.distances[i] < minDistance) {
+                minDistance = dijkstraState.distances[i];
+                minVertex = i;
+            }
+        }
+        
+        if (minVertex === null) {
+            // Algorithm complete
+            dijkstraState.complete = true;
+            dijkstraState.currentVertex = null;
+            currentVertexEl.textContent = 'Завершено';
+            currentDistanceEl.textContent = '-';
             
-            const path = [];
-            let current = i;
-            
-            while (current !== null) {
-                path.unshift(current);
-                current = algorithmState.previous[current];
+            // Display final paths
+            pathsList.innerHTML = '';
+            for (let i = 0; i < matrixSize; i++) {
+                if (i !== dijkstraState.startVertex) {
+                    const path = getPath(i);
+                    const distance = dijkstraState.distances[i];
+                    const pathStr = path.map(v => v + 1).join(' → ');
+                    
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>Путь до ${i + 1}: ${pathStr}</span>
+                
+                        <span class="path-distance">Расстояние: ${distance}</span>
+                    `;
+                    pathsList.appendChild(li);
+                }
             }
             
-            for (let j = 0; j < path.length - 1; j++) {
-                if ((path[j] === v1 && path[j+1] === v2) || 
-                    (path[j] === v2 && path[j+1] === v1)) {
-                    return true;
+            drawDijkstraState();
+            return false;
+        }
+        
+        // Mark vertex as visited
+        dijkstraState.visited[minVertex] = true;
+        dijkstraState.currentVertex = minVertex;
+        currentVertexEl.textContent = minVertex + 1;
+        currentDistanceEl.textContent = dijkstraState.distances[minVertex];
+        
+        // Update distances to neighbors
+        for (let i = 0; i < matrixSize; i++) {
+            if (matrixData[minVertex][i] === 1 && !dijkstraState.visited[i]) {
+                const newDistance = dijkstraState.distances[minVertex] + weightMatrix[minVertex][i];
+                
+                if (newDistance < dijkstraState.distances[i]) {
+                    dijkstraState.distances[i] = newDistance;
+                    dijkstraState.previous[i] = minVertex;
                 }
             }
         }
         
-        return false;
+        // Draw the updated state
+        drawDijkstraState();
+        return true;
     }
-    
-    // Start algorithm animation
-    function startAlgorithm() {
-        if (algorithmState.isRunning) {
-            stopAlgorithm();
+
+    // Start automated Dijkstra's algorithm
+    function startDijkstra() {
+        if (dijkstraState.isRunning) {
+            stopDijkstra();
             return;
         }
         
-        if (algorithmState.isComplete) {
-            resetAlgorithmState();
-        }
-        
-        algorithmState.isRunning = true;
-        startAlgorithmBtn.textContent = 'Pause';
+        dijkstraState.isRunning = true;
+        startDijkstraBtn.textContent = 'Пауза';
         
         const interval = 1100 - (animationSpeed * 100);
         
-        algorithmInterval = setInterval(() => {
-            if (!stepAlgorithm()) {
-                stopAlgorithm();
+        dijkstraInterval = setInterval(() => {
+            if (!stepDijkstra()) {
+                stopDijkstra();
             }
         }, interval);
     }
-    
-    // Stop algorithm animation
-    function stopAlgorithm() {
-        clearInterval(algorithmInterval);
-        algorithmState.isRunning = false;
-        startAlgorithmBtn.textContent = 'Continue';
+
+    // Stop Dijkstra animation
+    function stopDijkstra() {
+        clearInterval(dijkstraInterval);
+        dijkstraState.isRunning = false;
+        startDijkstraBtn.textContent = 'Продолжить';
     }
-    
-    // Event listeners
+
+    // Event Listeners
     generateMatrixBtn.addEventListener('click', function() {
         matrixSize = parseInt(matrixSizeInput.value);
-        representation = graphRepresentationSelect.value;
         createMatrixInput();
     });
     
     resetMatrixBtn.addEventListener('click', resetMatrix);
     loadExampleBtn.addEventListener('click', loadExample);
-    calculatePathsBtn.addEventListener('click', calculateShortestPaths);
+    findPathsBtn.addEventListener('click', findPaths);
     
-    startAlgorithmBtn.addEventListener('click', startAlgorithm);
-    stepAlgorithmBtn.addEventListener('click', function() {
-        stopAlgorithm();
-        stepAlgorithm();
+    startVertexSelect.addEventListener('change', resetDijkstraState);
+    startDijkstraBtn.addEventListener('click', startDijkstra);
+    stepDijkstraBtn.addEventListener('click', function() {
+        stopDijkstra();
+        stepDijkstra();
     });
-    restartAlgorithmBtn.addEventListener('click', resetAlgorithmState);
+    restartDijkstraBtn.addEventListener('click', resetDijkstraState);
     
     animationSpeedInput.addEventListener('input', function() {
         animationSpeed = parseInt(this.value);
-        if (algorithmState.isRunning) {
-            stopAlgorithm();
-            startAlgorithm();
-        }
-    });
-    
-    enableWeightsCheckbox.addEventListener('change', function() {
-        useWeights = this.checked;
-        defaultWeightInput.disabled = !useWeights;
-        
-        if (matrixData.length > 0) {
-            createMatrixInput();
+        if (dijkstraState.isRunning) {
+            stopDijkstra();
+            startDijkstra();
         }
     });
     
     // Initialize
     matrixSize = parseInt(matrixSizeInput.value);
-    representation = graphRepresentationSelect.value;
     initGraph();
 });
