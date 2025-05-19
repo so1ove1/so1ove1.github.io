@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алгоритмы на графах - Задача 7: Минимальное остовное дерево</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="task7.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="main-header">
+        <div class="container">
+            <div class="logo">GraphAlgo</div>
+            <nav class="desktop-nav">
+                <a href="index.html">Главная</a>
+                <a href="task0.html">Задача 0</a>
+                <a href="task7.html" class="active">Задача 7</a>
+            </nav>
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="4" x2="20" y1="12" y2="12"/>
+                    <line x1="4" x2="20" y1="6" y2="6"/>
+                    <line x1="4" x2="20" y1="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <div id="mobile-menu" class="hidden">
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="task0.html">Задача 0</a>
+            <a href="task7.html">Задача 7</a>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero task-hero">
+        <div class="container">
+            <h1>Задача 7: Минимальное остовное дерево</h1>
+            <p>Реализация и визуализация алгоритма построения минимального остовного дерева</p>
+        </div>
+    </section>
+
+    <!-- Task Content -->
+    <section class="task-content">
+        <div class="container">
+            <!-- Matrix Input -->
+            <div class="matrix-input-container">
+                <h2>Ввод взвешенного графа</h2>
+                <div class="input-controls">
+                    <div class="input-group">
+                        <label for="matrix-size">Размер графа:</label>
+                        <input type="number" id="matrix-size" min="2" max="10" value="5">
+                    </div>
+                    <button id="generate-matrix" class="btn primary">Создать матрицу</button>
+                    <button id="generate-random" class="btn secondary">Случайный граф</button>
+                    <button id="reset-matrix" class="btn secondary" disabled>Сбросить</button>
+                    <button id="load-example" class="btn secondary">Пример</button>
+                </div>
+
+                <p class="hint">Кликните на ячейку матрицы, чтобы изменить вес ребра. Вес 0 означает отсутствие ребра.</p>
+                
+                <div id="matrix-container" class="matrix-container"></div>
+                
+                <div class="matrix-actions">
+                    <button id="find-mst" class="btn primary" disabled>Найти минимальное остовное дерево</button>
+                </div>
+            </div>
+
+            <!-- Graph Visualization -->
+            <div class="visualization-container">
+                <div class="canvas-container">
+                    <canvas id="graph-canvas"></canvas>
+                </div>
+                <div class="visualization-controls">
+                    <button id="view-original" class="btn secondary active">Исходный граф</button>
+                    <button id="view-mst" class="btn secondary">Остовное дерево</button>
+                    <button id="view-step-by-step" class="btn secondary">Пошаговая визуализация</button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="results-container" class="results-container hidden">
+                <h2>Результаты анализа</h2>
+                <div class="graph-info">
+                    <div class="info-card">
+                        <h3>Минимальное остовное дерево</h3>
+                        <div id="mst-result" class="result-content">
+                            <p>Запустите алгоритм для построения MST</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h3>Детали алгоритма</h3>
+                        <div id="algorithm-details" class="result-content">
+                            <p>Здесь будет отображаться информация о шагах алгоритма</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2025 GraphAlgo - Реализация алгоритмов на графах</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="graph.js"></script>
+    <script src="task7.js"></script>
+</body>
+</html>
