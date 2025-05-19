@@ -1,0 +1,199 @@
+/* Task 8 specific styles */
+
+/* Weight input */
+.weight-input {
+    width: 40px;
+    height: 24px;
+    padding: 0 4px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-align: center;
+    font-family: "Ubuntu Mono", monospace;
+}
+
+/* Matrix cell with weight */
+.matrix-cell.active {
+    position: relative;
+}
+
+.matrix-cell .weight-indicator {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--accent);
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Weight controls */
+.weights-controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.weights-controls .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.weights-controls #enable-weights {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.weights-controls #default-weight {
+    width: 60px;
+    padding: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Shortest paths results */
+.shortest-paths-result {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.shortest-paths-result h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+
+.paths-table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.paths-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: "Ubuntu Mono", monospace;
+}
+
+.paths-table th,
+.paths-table td {
+    border: 1px solid var(--border);
+    padding: 0.75rem;
+    text-align: center;
+}
+
+.paths-table th {
+    background-color: var(--background);
+    font-weight: bold;
+    color: var(--foreground);
+}
+
+.paths-table tr:nth-child(even) {
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.paths-table tr:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.path-highlight {
+    font-weight: bold;
+    color: #8b5cf6;
+    transition: all 0.3s ease;
+}
+
+.infinity {
+    color: var(--muted);
+    font-style: italic;
+}
+
+/* Edge weights on graph */
+.edge-weight {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--foreground);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 2px 4px;
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+/* Start vertex selection */
+.start-vertex-selection {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.start-vertex-selection label {
+    margin-right: 0.5rem;
+}
+
+.start-vertex-selection select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+}
+
+/* Animations */
+@keyframes pulse-path {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 5px rgba(139, 92, 246, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+    }
+}
+
+.current-path {
+    animation: pulse-path 1.5s infinite;
+}
+
+@keyframes distance-update {
+    0% {
+        transform: scale(1);
+        color: var(--foreground);
+    }
+    50% {
+        transform: scale(1.2);
+        color: #10b981;
+    }
+    100% {
+        transform: scale(1);
+        color: var(--foreground);
+    }
+}
+
+.distance-updated {
+    animation: distance-update 1s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .paths-table th,
+    .paths-table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .weights-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+}
