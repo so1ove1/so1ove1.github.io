@@ -1,116 +1,181 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Алгоритмы на графах - Задача 7: Минимальное остовное дерево</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="task7.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertix - Минимальное остовное дерево</title>
+    <link rel="stylesheet" href="/vertix/css/style.css">
+    <link rel="stylesheet" href="/vertix/css/graph.css">
+    <link rel="stylesheet" href="/vertix/css/task7.css">
 </head>
 <body>
-    <!-- Header -->
     <header id="main-header">
         <div class="container">
-            <div class="logo">GraphAlgo</div>
+            <a href="/vertix/index.html" class="logo"><span>Vertix</span></a>
+
             <nav class="desktop-nav">
-                <a href="index.html">Главная</a>
-                <a href="task0.html">Задача 0</a>
-                <a href="task7.html" class="active">Задача 7</a>
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
             </nav>
+
             <button id="mobile-menu-toggle">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <line x1="4" x2="20" y1="12" y2="12"/>
-                    <line x1="4" x2="20" y1="6" y2="6"/>
-                    <line x1="4" x2="20" y1="18" y2="18"/>
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
                 </svg>
             </button>
         </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+        </div>
     </header>
 
-    <div id="mobile-menu" class="hidden">
-        <nav>
-            <a href="index.html">Главная</a>
-            <a href="task0.html">Задача 0</a>
-            <a href="task7.html">Задача 7</a>
-        </nav>
-    </div>
+    <main>
+        <section class="hero">
+            <div id="graph-background"></div>
+            <div class="container">
+                <h1>Минимальное остовное дерево</h1>
+                <p>Задача 7: Система предлагает пользователю задать взвешенный граф матрицей смежности
+                    и затем показывает пользователю алгоритм построения минимального остовного дерева.
+                </p>
+            </div>
+        </section>
 
-    <!-- Hero Section -->
-    <section class="hero task-hero">
-        <div class="container">
-            <h1>Задача 7: Минимальное остовное дерево</h1>
-            <p>Реализация и визуализация алгоритма построения минимального остовного дерева</p>
-        </div>
-    </section>
-
-    <!-- Task Content -->
-    <section class="task-content">
-        <div class="container">
-            <!-- Matrix Input -->
-            <div class="matrix-input-container">
-                <h2>Ввод взвешенного графа</h2>
-                <div class="input-controls">
-                    <div class="input-group">
-                        <label for="matrix-size">Размер графа:</label>
-                        <input type="number" id="matrix-size" min="2" max="10" value="5">
+        <section class="task-content">
+            <div class="container">
+                <div class="matrix-input-container">
+                    <div class="input-controls">
+                        <div class="input-group">
+                            <label for="matrix-size">Размер графа:</label>
+                            <input type="number" id="matrix-size" min="1" max="20" value="5">
+                        </div>
+                        <button id="generate-matrix" class="btn primary">Создать</button>
                     </div>
-                    <button id="generate-matrix" class="btn primary">Создать матрицу</button>
-                    <button id="generate-random" class="btn secondary">Случайный граф</button>
-                    <button id="reset-matrix" class="btn secondary" disabled>Сбросить</button>
-                    <button id="load-example" class="btn secondary">Пример</button>
+
+                    <div class="algorithm-selector">
+                        <label for="mst-algorithm">Алгоритм:</label>
+                        <select id="mst-algorithm">
+                            <option value="prim">Алгоритм Прима</option>
+                        </select>
+                    </div>
+
+                    <div id="matrix-container" class="matrix-container">
+                        <p class="hint">Выберите размер графа и нажмите "Создать" для задания весов рёбер</p>
+                    </div>
+
+                    <div class="matrix-actions">
+                        <button id="perform-mst" class="btn primary" disabled>Построить MST</button>
+                        <button id="reset-matrix" class="btn secondary" disabled>Сбросить</button>
+                        <button id="load-example" class="btn secondary">Загрузить пример</button>
+                    </div>
                 </div>
 
-                <p class="hint">Кликните на ячейку матрицы, чтобы изменить вес ребра. Вес 0 означает отсутствие ребра.</p>
-                
-                <div id="matrix-container" class="matrix-container"></div>
-                
-                <div class="matrix-actions">
-                    <button id="find-mst" class="btn primary" disabled>Найти минимальное остовное дерево</button>
-                </div>
-            </div>
+                <div class="results-container hidden" id="results-container">
+                    <h2>Построение минимального остовного дерева</h2>
 
-            <!-- Graph Visualization -->
-            <div class="visualization-container">
-                <div class="canvas-container">
-                    <canvas id="graph-canvas"></canvas>
-                </div>
-                <div class="visualization-controls">
-                    <button id="view-original" class="btn secondary active">Исходный граф</button>
-                    <button id="view-mst" class="btn secondary">Остовное дерево</button>
-                    <button id="view-step-by-step" class="btn secondary">Пошаговая визуализация</button>
-                </div>
-            </div>
+                    <div class="graph-container">
+                        <canvas id="graph-canvas" class="graph-canvas" width="500" height="400"></canvas>
+                    </div>
 
-            <!-- Results -->
-            <div id="results-container" class="results-container hidden">
-                <h2>Результаты анализа</h2>
-                <div class="graph-info">
-                    <div class="info-card">
-                        <h3>Минимальное остовное дерево</h3>
-                        <div id="mst-result" class="result-content">
-                            <p>Запустите алгоритм для построения MST</p>
+                    <div class="traversal-info">
+                        <div class="traversal-controls">
+                            <button id="start-mst" class="btn primary">Начать алгоритм</button>
+                            <button id="step-mst" class="btn secondary">Следующий шаг</button>
+                            <button id="restart-mst" class="btn secondary">Сбросить</button>
+                            <div class="speed-control">
+                                <label for="animation-speed">Скорость:</label>
+                                <input type="range" id="animation-speed" min="1" max="10" value="5">
+                            </div>
+                        </div>
+
+                        <div class="traversal-status">
+                            <div class="status-item">
+                                <span class="label">Текущий шаг:</span>
+                                <span id="current-step" class="value">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Рассматриваемое ребро:</span>
+                                <span id="current-edge" class="value">-</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Общий вес MST:</span>
+                                <span id="total-weight" class="value">0</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="info-card">
-                        <h3>Детали алгоритма</h3>
-                        <div id="algorithm-details" class="result-content">
-                            <p>Здесь будет отображаться информация о шагах алгоритма</p>
+
+                    <div class="traversal-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #3b82f6;"></div>
+                            <span>Невыбранная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #10b981;"></div>
+                            <span>Выбранная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #1e40af;"></div>
+                            <span>Обычное ребро</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #f59e0b;"></div>
+                            <span>Рассматриваемое ребро</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #a3e635;"></div>
+                            <span>Ребро MST</span>
+                        </div>
+                    </div>
+
+                    <div id="mst-result" class="mst-result">
+                        <h3>Результат построения MST</h3>
+                        <div id="mst-edges" class="mst-edges">
+                            <span>-</span>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
+                <div class="info-container">
+                    <h3>О минимальном остовном дереве</h3>
+                    <p>Минимальное остовное дерево (MST, Minimum Spanning Tree) — это подграф взвешенного неориентированного графа, 
+                       который является деревом и включает все вершины графа, причем сумма весов его ребер минимальна.</p>
+
+                    <h4>Алгоритм Прима:</h4>
+                    <ol>
+                        <li>Выбираем произвольную начальную вершину.</li>
+                        <li>На каждом шаге находим ребро минимального веса, соединяющее вершину из построенного дерева с вершиной вне его.</li>
+                        <li>Добавляем найденное ребро в минимальное остовное дерево.</li>
+                        <li>Повторяем процесс, пока все вершины не будут включены в дерево.</li>
+                    </ol>
+
+                    <h4>Применение MST:</h4>
+                    <ul>
+                        <li>Проектирование сетей (компьютерных, электрических, транспортных) с минимальной стоимостью.</li>
+                        <li>Решение задач кластеризации в машинном обучении.</li>
+                        <li>Приближенные алгоритмы для задачи коммивояжера.</li>
+                        <li>Задачи регионализации в ГИС системах.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <footer>
-        <div class="container">
-            <p>© 2025 GraphAlgo - Реализация алгоритмов на графах</p>
+        <div class="about">
+            <p>Vertix - это учебный проект, разработанный для изучения теории графов.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
-    <script src="graph.js"></script>
-    <script src="task7.js"></script>
+    <script type="module" src="/vertix/js/script.js"></script>
+    <script type="module" src="/vertix/js/graph.js"></script>
+    <script type="module" src="/vertix/js/task7.js"></script>
 </body>
 </html>
