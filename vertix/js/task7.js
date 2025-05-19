@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Create Weight Matrix Input UI
-  function createWeightMatrixInput() {
+  function createMatrixInput() {
     matrixContainer.innerHTML = '';
     weightMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
     
@@ -113,58 +113,46 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (i === j) {
           // Diagonal cells (no self-loops)
-          const cell = document.createElement('div');
+          const cell = document.createElement('button');
           cell.className = 'matrix-cell';
-          cell.textContent = '×';
-          cell.style.backgroundColor = '#f1f5f9';
-          cell.style.cursor = 'not-allowed';
+          cell.textContent = '0';
+          cell.style.backgroundColor = '#f8f9fa';
+          cell.style.cursor = 'default';
           td.appendChild(cell);
         } else {
           // Weight input cell
-          const cell = document.createElement('div');
-          cell.className = 'matrix-cell weight-input';
+          const cell = document.createElement('button');
+          cell.className = 'matrix-cell';
+          cell.textContent = '0';
+          cell.dataset.row = i;
+          cell.dataset.col = j;
           
-          const input = document.createElement('input');
-          input.type = 'number';
-          input.min = '0';
-          input.value = '0';
-          input.dataset.row = i;
-          input.dataset.col = j;
-          
-          input.addEventListener('input', function() {
+          cell.addEventListener('click', function() {
             const r = parseInt(this.dataset.row);
             const c = parseInt(this.dataset.col);
-            const value = parseInt(this.value) || 0;
+            const currentWeight = weightMatrix[r][c];
+            const newWeight = (currentWeight + 1) % 10;
             
-            // Update weight matrix (symmetrically for undirected graph)
-            weightMatrix[r][c] = value;
-            weightMatrix[c][r] = value;
+            weightMatrix[r][c] = newWeight;
+            weightMatrix[c][r] = newWeight;
+            this.textContent = newWeight;
             
-            // Update the symmetric cell
-            if (r !== c) {
-              const symmetricInput = document.querySelector(`input[data-row="${c}"][data-col="${r}"]`);
-              if (symmetricInput && symmetricInput.value !== this.value) {
-                symmetricInput.value = this.value;
-              }
+            // Update symmetric cell
+            const symmetricCell = document.querySelector(`.matrix-cell[data-row="${c}"][data-col="${r}"]`);
+            if (symmetricCell) {
+              symmetricCell.textContent = newWeight;
             }
             
-            // Highlight cells with weights
-            if (value > 0) {
-              cell.classList.add('active');
-              const symmetricCell = document.querySelector(`.matrix-cell.weight-input input[data-row="${c}"][data-col="${r}"]`).parentNode;
-              if (symmetricCell) {
-                symmetricCell.classList.add('active');
-              }
+            // Toggle active class based on weight
+            if (newWeight > 0) {
+              this.classList.add('active');
+              symmetricCell.classList.add('active');
             } else {
-              cell.classList.remove('active');
-              const symmetricCell = document.querySelector(`.matrix-cell.weight-input input[data-row="${c}"][data-col="${r}"]`).parentNode;
-              if (symmetricCell) {
-                symmetricCell.classList.remove('active');
-              }
+              this.classList.remove('active');
+              symmetricCell.classList.remove('active');
             }
           });
           
-          cell.appendChild(input);
           td.appendChild(cell);
         }
         
@@ -185,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
     matrixSizeInput.value = matrixSize;
     
     // Create the matrix UI first
-    createWeightMatrixInput();
+    createMatrixInput();
     
     // Example weight matrix for a connected graph
     const exampleWeights = [
@@ -199,12 +187,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update the UI and data
     for (let i = 0; i < matrixSize; i++) {
       for (let j = 0; j < matrixSize; j++) {
-        if (i !== j && exampleWeights[i][j] > 0) {
+        if (exampleWeights[i][j] > 0) {
           weightMatrix[i][j] = exampleWeights[i][j];
-          const input = document.querySelector(`input[data-row="${i}"][data-col="${j}"]`);
-          if (input) {
-            input.value = exampleWeights[i][j];
-            input.parentNode.classList.add('active');
+          const cell = document.querySelector(`.matrix-cell[data-row="${i}"][data-col="${j}"]`);
+          if (cell) {
+            cell.textContent = exampleWeights[i][j];
+            cell.classList.add('active');
           }
         }
       }
@@ -215,7 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function resetMatrix() {
     matrixContainer.innerHTML = '';
     weightMatrix = [];
-    createWeightMatrixInput();
+    createMatrixInput();
   }
 
   // Build adjacency matrix from weight matrix
@@ -440,7 +428,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Event Listeners
   generateMatrixBtn.addEventListener('click', function() {
     matrixSize = parseInt(matrixSizeInput.value);
-    createWeightMatrixInput();
+    createMatrixInput();
   });
 
   resetMatrixBtn.addEventListener('click', resetMatrix);
@@ -469,5 +457,5 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize
   matrixSize = parseInt(matrixSizeInput.value);
   initGraph();
-  createWeightMatrixInput();
+  createMatrixInput();
 });
