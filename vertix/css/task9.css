@@ -1,0 +1,221 @@
+/* Task 9 - All-Pairs Shortest Paths styles */
+
+/* Matrix styles for weighted representation */
+.matrix-cell.weighted {
+    position: relative;
+    width: 3rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    background-color: var(--background);
+    text-align: center;
+    font-family: 'Ubuntu Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.matrix-cell.weighted:focus {
+    outline: 2px solid var(--accent);
+}
+
+.weight-input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    padding: 0.25rem;
+    text-align: center;
+    font-family: 'Ubuntu Mono', monospace;
+    background-color: transparent;
+}
+
+/* Paths specific styles */
+.paths-info {
+    margin: 2rem 0;
+}
+
+.paths-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.paths-controls button {
+    padding: 0.75rem 1.5rem;
+    min-width: 120px;
+}
+
+.paths-status {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.paths-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background-color: var(--background);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border);
+}
+
+.paths-result {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.paths-result h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+
+.shortest-paths-matrix {
+    padding: 1rem;
+    background-color: var(--background);
+    border-radius: 6px;
+    overflow-x: auto;
+}
+
+.shortest-paths-matrix table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Ubuntu Mono', monospace;
+}
+
+.shortest-paths-matrix th,
+.shortest-paths-matrix td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.shortest-paths-matrix th {
+    background-color: var(--accent);
+    color: white;
+}
+
+.shortest-paths-matrix td {
+    background-color: var(--card);
+}
+
+.shortest-paths-matrix td.highlight {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.shortest-paths-matrix td.updated {
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.shortest-paths-matrix td.infinity {
+    color: var(--muted);
+}
+
+/* Speed control */
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.speed-control label {
+    color: var(--foreground);
+}
+
+.speed-control input {
+    width: 100px;
+}
+
+/* Status items */
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+
+.status-item .label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+}
+
+.status-item .value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--foreground);
+}
+
+/* Animation for path updates */
+@keyframes path-update {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.path-updated {
+    animation: path-update 0.5s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .paths-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .paths-status {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .paths-legend {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .matrix-cell.weighted {
+        width: 2.5rem;
+        height: 1.8rem;
+    }
+
+    .shortest-paths-matrix {
+        font-size: 0.9rem;
+    }
+
+    .shortest-paths-matrix th,
+    .shortest-paths-matrix td {
+        padding: 0.25rem;
+    }
+}
