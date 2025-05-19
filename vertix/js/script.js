@@ -2,6 +2,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const header = document.getElementById('main-header');
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
+    const head = document.head;
+
+    const faviconLinks = `
+        <link rel="apple-touch-icon" sizes="57x57" href="/vertix/favicon/favicon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/vertix/favicon/favicon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/vertix/favicon/favicon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/vertix/favicon/favicon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/vertix/favicon/favicon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/vertix/favicon/favicon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/vertix/favicon/favicon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/vertix/favicon/favicon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/vertix/favicon/favicon-180x180.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/vertix/favicon/favicon-16x16.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/vertix/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/vertix/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/vertix/favicon/favicon-192x192.png">
+        <link rel="shortcut icon" type="image/x-icon" href="/vertix/favicon/favicon.ico">
+        <link rel="icon" type="image/x-icon" href="/vertix/favicon/favicon.ico">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/vertix/favicon/favicon-144x144.png">
+        <meta name="msapplication-config" content="/vertix/favicon/browserconfig.xml">
+    `;
+
+    head.insertAdjacentHTML('beforeend', faviconLinks);
 
     // эффект прокрутки для заголовка
     window.addEventListener('scroll', function () {
