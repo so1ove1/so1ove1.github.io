@@ -1,5 +1,9 @@
 /* Task 7 specific styles */
 
+.info-container{
+  margin-bottom: 1.5rem;
+}
+
 /* Matrix table */
 .matrix-table {
   margin: 0 auto;
