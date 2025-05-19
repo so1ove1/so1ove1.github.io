@@ -1,0 +1,227 @@
+/* Task 11 - Prüfer Decode styles */
+
+/* Input styles */
+.prufer-input-container {
+    margin: 2rem auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+.prufer-sequence-input {
+    margin: 2rem 0;
+}
+
+.sequence-input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Ubuntu Mono', monospace;
+    background-color: var(--background);
+    color: var(--foreground);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.sequence-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.sequence-input:disabled {
+    background-color: var(--muted);
+    cursor: not-allowed;
+}
+
+.input-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.input-actions button {
+    min-width: 140px;
+    padding: 0.75rem 1.5rem;
+}
+
+/* Decode specific styles */
+.decode-info {
+    margin: 2rem 0;
+}
+
+.decode-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.decode-controls button {
+    padding: 0.75rem 1.5rem;
+    min-width: 120px;
+}
+
+.decode-status {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.decode-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background-color: var(--background);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border);
+}
+
+.decode-result {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.decode-result h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+
+.tree-edges {
+    padding: 1rem;
+    background-color: var(--background);
+    border-radius: 6px;
+}
+
+.tree-edges p {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.tree-edges ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.tree-edges li {
+    padding: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tree-edges li:last-child {
+    border-bottom: none;
+}
+
+.tree-edges .edge-vertices {
+    font-family: 'Ubuntu Mono', monospace;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+/* Speed control */
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.speed-control label {
+    color: var(--foreground);
+}
+
+.speed-control input {
+    width: 100px;
+}
+
+/* Status items */
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+
+.status-item .label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+}
+
+.status-item .value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--foreground);
+}
+
+/* Animation for edge addition */
+@keyframes edge-add {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.edge-adding {
+    animation: edge-add 0.5s ease-out forwards;
+}
+
+.info-container {
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .decode-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .decode-status {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .decode-legend {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sequence-input {
+        width: 100%;
+    }
+
+    .prufer-sequence-input {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

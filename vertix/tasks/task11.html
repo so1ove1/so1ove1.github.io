@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertix - Декодирование кода Прюфера</title>
+    <link rel="stylesheet" href="/vertix/css/style.css">
+    <link rel="stylesheet" href="/vertix/css/graph.css">
+    <link rel="stylesheet" href="/vertix/css/task11.css">
+    <link rel="stylesheet" href="/vertix/css/task1.css">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/vertix/index.html" class="logo"><span>Vertix</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="graph-background"></div>
+            <div class="container">
+                <h1>Декодирование кода Прюфера</h1>
+                <p>Задача 11: Реализация алгоритма декодирования кода Прюфера в дерево.</p>
+            </div>
+        </section>
+
+        <section class="task-content">
+            <div class="container">
+                <div class="prufer-input-container">
+                    <div class="prufer-sequence-input">
+                        <input type="text" id="prufer-sequence" class="sequence-input"
+                            placeholder="Введите код Прюфера (числа через запятую)">
+                    </div>
+
+                    <div class="input-actions">
+                        <button id="decode-prufer" class="btn primary" disabled>Декодировать</button>
+                        <button id="reset-input" class="btn secondary" disabled>Сбросить</button>
+                        <button id="load-example" class="btn secondary">Загрузить пример</button>
+                    </div>
+                </div>
+
+                <div class="results-container hidden" id="results-container">
+                    <h2>Декодирование кода Прюфера в дерево</h2>
+
+                    <div class="graph-container">
+                        <canvas id="graph-canvas" class="graph-canvas" width="500" height="400"></canvas>
+                    </div>
+
+                    <div class="decode-info">
+                        <div class="decode-controls">
+                            <button id="start-decode" class="btn primary">Начать декодирование</button>
+                            <button id="step-decode" class="btn secondary">Следующий шаг</button>
+                            <button id="restart-decode" class="btn secondary">Сбросить</button>
+                            <div class="speed-control">
+                                <label for="animation-speed">Скорость:</label>
+                                <input type="range" id="animation-speed" min="1" max="10" value="5">
+                            </div>
+                        </div>
+
+                        <div class="decode-status">
+                            <div class="status-item">
+                                <span class="label">Текущий шаг:</span>
+                                <span id="current-step" class="value">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Текущая вершина:</span>
+                                <span id="current-vertex" class="value">-</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Добавляемое ребро:</span>
+                                <span id="current-edge" class="value">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="decode-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #3b82f6;"></div>
+                            <span>Доступная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #f97316;"></div>
+                            <span>Текущая вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #10b981;"></div>
+                            <span>Использованная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #1e40af;"></div>
+                            <span>Ребро дерева</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #a3e635;"></div>
+                            <span>Новое ребро</span>
+                        </div>
+                    </div>
+
+                    <div id="decode-result" class="decode-result">
+                        <h3>Результат декодирования</h3>
+                        <div id="tree-edges" class="tree-edges">
+                            <p>Декодирование не начато</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-container">
+                    <h3>О декодировании кода Прюфера</h3>
+                    <p>Декодирование кода Прюфера — это процесс восстановления дерева из его кода Прюфера. Это обратная
+                        операция к кодированию Прюфера, и она всегда дает единственное дерево.</p>
+
+                    <h4>Алгоритм декодирования:</h4>
+                    <ol>
+                        <li>Создать список вершин от 1 до n+2, где n — длина кода Прюфера</li>
+                        <li>Найти наименьшую вершину, которая не входит в код Прюфера</li>
+                        <li>Соединить эту вершину с первой вершиной в коде</li>
+                        <li>Удалить использованную вершину из списка и первый элемент из кода</li>
+                        <li>Повторять шаги 2-4, пока код не будет пуст</li>
+                        <li>Соединить две оставшиеся вершины</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Vertix - это учебный проект, разработанный для изучения теории графов.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/vertix/js/script.js"></script>
+    <script type="module" src="/vertix/js/graph.js"></script>
+    <script type="module" src="/vertix/js/task11.js"></script>
+</body>
+
+</html>
