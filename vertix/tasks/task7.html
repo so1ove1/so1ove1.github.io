@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,8 +8,10 @@
     <link rel="stylesheet" href="/vertix/css/style.css">
     <link rel="stylesheet" href="/vertix/css/graph.css">
     <link rel="stylesheet" href="/vertix/css/task7.css">
+    <link rel="stylesheet" href="/vertix/css/task0.css">
     <link rel="stylesheet" href="/vertix/css/task1.css">
 </head>
+
 <body>
     <header id="main-header">
         <div class="container">
@@ -43,9 +46,7 @@
             <div id="graph-background"></div>
             <div class="container">
                 <h1>Минимальное остовное дерево</h1>
-                <p>Задача 7: Система предлагает пользователю задать взвешенный граф матрицей смежности
-                    и затем показывает пользователю алгоритм построения минимального остовного дерева.
-                </p>
+                <p>Задача 7: Выбрать и реализовать алгоритм построения минимального остовного дерева.</p>
             </div>
         </section>
 
@@ -55,35 +56,38 @@
                     <div class="input-controls">
                         <div class="input-group">
                             <label for="matrix-size">Размер графа:</label>
-                            <input type="number" id="matrix-size" min="1" max="20" value="5">
+                            <input type="number" id="matrix-size" min="3" max="15" value="5">
+                        </div>
+                        <div class="input-group">
+                            <label for="graph-representation">Способ задания:</label>
+                            <select id="graph-representation">
+                                <option value="adjacency">Матрица смежности</option>
+                                <option value="weighted">Матрица весов</option>
+                            </select>
                         </div>
                         <button id="generate-matrix" class="btn primary">Создать</button>
                     </div>
 
-                    <div class="algorithm-selector">
-                        <option id="mst-algorithm" for="mst-algorithm" value="prim">Алгоритм Прима</option>
-                    </div>
-
                     <div id="matrix-container" class="matrix-container">
-                        <p class="hint">Выберите размер графа и нажмите "Создать" для задания весов рёбер</p>
+                        <p class="hint">Выберите размер и способ задания графа, затем нажмите "Создать"</p>
                     </div>
 
                     <div class="matrix-actions">
-                        <button id="perform-mst" class="btn primary" disabled>Построить MST</button>
+                        <button id="find-mst" class="btn primary" disabled>Найти MST</button>
                         <button id="reset-matrix" class="btn secondary" disabled>Сбросить</button>
                         <button id="load-example" class="btn secondary">Загрузить пример</button>
                     </div>
                 </div>
 
                 <div class="results-container hidden" id="results-container">
-                    <h2>Построение минимального остовного дерева</h2>
+                    <h2>Минимальное остовное дерево (алгоритм Прима)</h2>
 
                     <div class="graph-container">
                         <canvas id="graph-canvas" class="graph-canvas" width="500" height="400"></canvas>
                     </div>
 
-                    <div class="traversal-info">
-                        <div class="traversal-controls">
+                    <div class="mst-info">
+                        <div class="mst-controls">
                             <button id="start-mst" class="btn primary">Начать алгоритм</button>
                             <button id="step-mst" class="btn secondary">Следующий шаг</button>
                             <button id="restart-mst" class="btn secondary">Сбросить</button>
@@ -93,14 +97,14 @@
                             </div>
                         </div>
 
-                        <div class="traversal-status">
+                        <div class="mst-status">
                             <div class="status-item">
                                 <span class="label">Текущий шаг:</span>
                                 <span id="current-step" class="value">0</span>
                             </div>
                             <div class="status-item">
-                                <span class="label">Рассматриваемое ребро:</span>
-                                <span id="current-edge" class="value">-</span>
+                                <span class="label">Текущая вершина:</span>
+                                <span id="current-vertex" class="value">-</span>
                             </div>
                             <div class="status-item">
                                 <span class="label">Общий вес MST:</span>
@@ -109,22 +113,22 @@
                         </div>
                     </div>
 
-                    <div class="traversal-legend">
+                    <div class="mst-legend">
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #3b82f6;"></div>
-                            <span>Невыбранная вершина</span>
+                            <span>Не добавленная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #f97316;"></div>
+                            <span>Текущая вершина</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #10b981;"></div>
-                            <span>Выбранная вершина</span>
+                            <span>Добавленная вершина</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #1e40af;"></div>
-                            <span>Обычное ребро</span>
-                        </div>
-                        <div class="legend-item">
-                            <div class="legend-color" style="background-color: #f59e0b;"></div>
-                            <span>Рассматриваемое ребро</span>
+                            <span>Ребро графа</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background-color: #a3e635;"></div>
@@ -135,23 +139,37 @@
                     <div id="mst-result" class="mst-result">
                         <h3>Результат построения MST</h3>
                         <div id="mst-edges" class="mst-edges">
-                            <span>-</span>
+                            <p>Ребра MST:</p>
+                            <ul id="mst-edges-list">
+                                <li>Построение не начато</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
                 <div class="info-container">
-                    <h3>О минимальном остовном дереве</h3>
-                    <p>Минимальное остовное дерево (MST, Minimum Spanning Tree) — это подграф взвешенного неориентированного графа, 
-                       который является деревом и включает все вершины графа, причем сумма весов его ребер минимальна.</p>
+                    <h3>Об алгоритме минимального остовного дерева (алгоритм Прима)</h3>
+                    <p>Алгоритм Прима — жадный алгоритм, который находит минимальное остовное дерево для взвешенного
+                        неориентированного графа. Это означает, что он находит подмножество рёбер, которые образуют
+                        дерево, включающее каждую вершину, где сумма весов всех рёбер в дереве минимальна.</p>
 
-                    <h4>Алгоритм Прима:</h4>
+                    <h4>Основные шаги алгоритма:</h4>
                     <ol>
-                        <li>Выбираем произвольную начальную вершину.</li>
-                        <li>На каждом шаге находим ребро минимального веса, соединяющее вершину из построенного дерева с вершиной вне его.</li>
-                        <li>Добавляем найденное ребро в минимальное остовное дерево.</li>
-                        <li>Повторяем процесс, пока все вершины не будут включены в дерево.</li>
+                        <li>Выбрать произвольную начальную вершину и включить её в остовное дерево</li>
+                        <li>Рассмотреть все рёбра, исходящие из вершин, уже включённых в остовное дерево</li>
+                        <li>Выбрать ребро с наименьшим весом, которое соединяет вершину в дереве с вершиной вне дерева
+                        </li>
+                        <li>Добавить выбранное ребро и новую вершину в остовное дерево</li>
+                        <li>Повторять шаги 2-4, пока все вершины не будут включены в дерево</li>
                     </ol>
+
+                    <h4>Применение минимальных остовных деревьев:</h4>
+                    <ul>
+                        <li>Проектирование сетей (компьютерных, телекоммуникационных, транспортных)</li>
+                        <li>Кластеризация и классификация данных</li>
+                        <li>Приближенные алгоритмы для задачи коммивояжёра</li>
+                        <li>Построение оптимальной структуры распределительных сетей</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -168,4 +186,5 @@
     <script type="module" src="/vertix/js/graph.js"></script>
     <script type="module" src="/vertix/js/task7.js"></script>
 </body>
+
 </html>

@@ -1,16 +1,16 @@
-import Graph from './graph.js';
+import Graph from '/vertix/js/graph.js';
 
-document.addEventListener('DOMContentLoaded', function() {
-  // Elements
+document.addEventListener('DOMContentLoaded', function () {
+  // DOM Elements
   const matrixSizeInput = document.getElementById('matrix-size');
+  const graphRepresentationSelect = document.getElementById('graph-representation');
   const generateMatrixBtn = document.getElementById('generate-matrix');
   const resetMatrixBtn = document.getElementById('reset-matrix');
   const loadExampleBtn = document.getElementById('load-example');
-  const performMstBtn = document.getElementById('perform-mst');
+  const findMstBtn = document.getElementById('find-mst');
   const matrixContainer = document.getElementById('matrix-container');
   const resultsContainer = document.getElementById('results-container');
   const graphCanvas = document.getElementById('graph-canvas');
-  const mstAlgorithmSelect = document.getElementById('mst-algorithm');
 
   // MST Controls
   const startMstBtn = document.getElementById('start-mst');
@@ -18,181 +18,286 @@ document.addEventListener('DOMContentLoaded', function() {
   const restartMstBtn = document.getElementById('restart-mst');
   const animationSpeedInput = document.getElementById('animation-speed');
   const currentStepEl = document.getElementById('current-step');
-  const currentEdgeEl = document.getElementById('current-edge');
+  const currentVertexEl = document.getElementById('current-vertex');
   const totalWeightEl = document.getElementById('total-weight');
-  const mstEdgesEl = document.getElementById('mst-edges');
+  const mstEdgesList = document.getElementById('mst-edges-list');
 
   // State Variables
   let graph = null;
   let matrixSize = 5;
+  let representation = 'adjacency';
+  let matrixData = [];
   let weightMatrix = [];
   let mstInterval = null;
   let animationSpeed = 5;
   let mstState = {
-    step: 0,
-    visitedVertices: [],
-    mstEdges: [],
+    inTree: [],         // Vertices in the MST
+    minEdges: [],       // Minimum weight edges for each vertex
+    parent: [],         // Parent of each vertex in the MST
+    currentVertex: null,
+    mstEdges: [],       // Edges in the MST
     totalWeight: 0,
-    currentEdge: null,
+    step: 0,
     isRunning: false,
-    candidateEdges: [],
-    algorithm: 'prim'
+    complete: false
   };
 
   // Initialize Graph
   function initGraph() {
     graph = new Graph(matrixSize);
     graph.setCanvas(graphCanvas);
-    
-    // Add method to draw weighted edges
-    graph.drawWeightedEdge = function(from, to, weight, color = null) {
-      const fromPos = this.nodePositions[from];
-      const toPos = this.nodePositions[to];
-      
-      // Draw the edge line
-      this.ctx.beginPath();
-      this.ctx.moveTo(fromPos.x, fromPos.y);
-      this.ctx.lineTo(toPos.x, toPos.y);
-      this.ctx.strokeStyle = color || this.colors.edge;
-      this.ctx.lineWidth = 2;
-      this.ctx.stroke();
-      
-      // Draw the weight label
-      const midX = (fromPos.x + toPos.x) / 2;
-      const midY = (fromPos.y + toPos.y) / 2;
-      
-      // Background for weight
-      this.ctx.beginPath();
-      this.ctx.arc(midX, midY, 12, 0, 2 * Math.PI);
-      this.ctx.fillStyle = 'white';
-      this.ctx.fill();
-      this.ctx.strokeStyle = '#e2e8f0';
-      this.ctx.lineWidth = 1;
-      this.ctx.stroke();
-      
-      // Weight text
-      this.ctx.fillStyle = '#1e293b';
-      this.ctx.font = '12px Ubuntu Mono, monospace';
-      this.ctx.textAlign = 'center';
-      this.ctx.textBaseline = 'middle';
-      this.ctx.fillText(weight, midX, midY);
-    };
   }
 
-  // Create Weight Matrix Input UI
+  // Create Matrix Input UI based on representation
   function createMatrixInput() {
     matrixContainer.innerHTML = '';
+    matrixData = [];
+    weightMatrix = [];
+
+    if (representation === 'adjacency') {
+      createAdjacencyMatrixUI();
+    } else if (representation === 'weighted') {
+      createWeightedMatrixUI();
+    }
+
+    resetMatrixBtn.disabled = false;
+    findMstBtn.disabled = false;
+  }
+
+  // Create Adjacency Matrix UI
+  function createAdjacencyMatrixUI() {
+    matrixData = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
     weightMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
-    
+
     const table = document.createElement('table');
     table.className = 'matrix-table';
-    
+
     // Header row with indices
     const headerRow = document.createElement('tr');
     headerRow.appendChild(document.createElement('th')); // Empty corner cell
-    
+
     for (let i = 0; i < matrixSize; i++) {
       const th = document.createElement('th');
       th.textContent = i + 1;
       headerRow.appendChild(th);
     }
-    
+
     table.appendChild(headerRow);
-    
+
     // Matrix rows
     for (let i = 0; i < matrixSize; i++) {
       const row = document.createElement('tr');
-      
+
       // Row header (vertex label)
       const th = document.createElement('th');
       th.textContent = i + 1;
       row.appendChild(th);
-      
+
       for (let j = 0; j < matrixSize; j++) {
         const td = document.createElement('td');
-        
-        if (i === j) {
-          // Diagonal cells (no self-loops)
-          const cell = document.createElement('button');
-          cell.className = 'matrix-cell';
-          cell.textContent = '0';
-          cell.style.backgroundColor = '#f8f9fa';
-          cell.style.cursor = 'default';
-          td.appendChild(cell);
-        } else {
-          // Weight input cell
-          const cell = document.createElement('button');
-          cell.className = 'matrix-cell';
-          cell.textContent = '0';
-          cell.dataset.row = i;
-          cell.dataset.col = j;
-          
-          cell.addEventListener('click', function() {
-            const r = parseInt(this.dataset.row);
-            const c = parseInt(this.dataset.col);
-            const currentWeight = weightMatrix[r][c];
-            const newWeight = (currentWeight + 1) % 10;
-            
-            weightMatrix[r][c] = newWeight;
-            weightMatrix[c][r] = newWeight;
-            this.textContent = newWeight;
-            
+        const input = document.createElement('button');
+        input.className = 'matrix-cell';
+        input.textContent = '0';
+        input.dataset.row = i;
+        input.dataset.col = j;
+
+        input.addEventListener('click', function () {
+          const r = parseInt(this.dataset.row);
+          const c = parseInt(this.dataset.col);
+
+          if (matrixData[r][c] === 0) {
+            matrixData[r][c] = 1;
+            matrixData[c][r] = 1; // For undirected graph
+
+            // Generate random weight between 1 and 10
+            const weight = Math.floor(Math.random() * 10) + 1;
+            weightMatrix[r][c] = weight;
+            weightMatrix[c][r] = weight; // For undirected graph
+
+            this.textContent = weight;
+            this.classList.add('active');
+
             // Update symmetric cell
-            const symmetricCell = document.querySelector(`.matrix-cell[data-row="${c}"][data-col="${r}"]`);
-            if (symmetricCell) {
-              symmetricCell.textContent = newWeight;
+            if (r !== c) {
+              const symmetricCell = document.querySelector(`.matrix-cell[data-row="${c}"][data-col="${r}"]`);
+              if (symmetricCell) {
+                symmetricCell.textContent = weight;
+                symmetricCell.classList.add('active');
+              }
             }
-            
-            // Toggle active class based on weight
-            if (newWeight > 0) {
-              this.classList.add('active');
-              symmetricCell.classList.add('active');
-            } else {
-              this.classList.remove('active');
-              symmetricCell.classList.remove('active');
+          } else {
+            matrixData[r][c] = 0;
+            matrixData[c][r] = 0; // For undirected graph
+            weightMatrix[r][c] = 0;
+            weightMatrix[c][r] = 0; // For undirected graph
+
+            this.textContent = '0';
+            this.classList.remove('active');
+
+            // Update symmetric cell
+            if (r !== c) {
+              const symmetricCell = document.querySelector(`.matrix-cell[data-row="${c}"][data-col="${r}"]`);
+              if (symmetricCell) {
+                symmetricCell.textContent = '0';
+                symmetricCell.classList.remove('active');
+              }
             }
-          });
-          
-          td.appendChild(cell);
-        }
-        
+          }
+        });
+
+        td.appendChild(input);
         row.appendChild(td);
       }
-      
+
       table.appendChild(row);
     }
-    
+
     matrixContainer.appendChild(table);
-    resetMatrixBtn.disabled = false;
-    performMstBtn.disabled = false;
+  }
+
+  // Create Weighted Matrix UI
+  function createWeightedMatrixUI() {
+    matrixData = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
+    weightMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
+
+    const table = document.createElement('table');
+    table.className = 'matrix-table';
+
+    // Header row with indices
+    const headerRow = document.createElement('tr');
+    headerRow.appendChild(document.createElement('th')); // Empty corner cell
+
+    for (let i = 0; i < matrixSize; i++) {
+      const th = document.createElement('th');
+      th.textContent = i + 1;
+      headerRow.appendChild(th);
+    }
+
+    table.appendChild(headerRow);
+
+    // Matrix rows
+    for (let i = 0; i < matrixSize; i++) {
+      const row = document.createElement('tr');
+
+      // Row header (vertex label)
+      const th = document.createElement('th');
+      th.textContent = i + 1;
+      row.appendChild(th);
+
+      for (let j = 0; j < matrixSize; j++) {
+        if (i === j) {
+          // Diagonal cells are disabled (no self-loops)
+          const td = document.createElement('td');
+          const input = document.createElement('button');
+          input.className = 'matrix-cell';
+          input.textContent = '0';
+          input.disabled = true;
+          td.appendChild(input);
+          row.appendChild(td);
+          continue;
+        }
+
+        const td = document.createElement('td');
+        const cellContainer = document.createElement('div');
+        cellContainer.className = 'matrix-cell weighted';
+
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'weight-input';
+        input.min = '0';
+        input.max = '99';
+        input.value = '0';
+        input.dataset.row = i;
+        input.dataset.col = j;
+
+        input.addEventListener('input', function () {
+          const r = parseInt(this.dataset.row);
+          const c = parseInt(this.dataset.col);
+          const val = parseInt(this.value) || 0;
+
+          // Update weight and adjacency matrices
+          if (val > 0) {
+            matrixData[r][c] = 1;
+            matrixData[c][r] = 1; // For undirected graph
+            weightMatrix[r][c] = val;
+            weightMatrix[c][r] = val; // For undirected graph
+
+            this.parentElement.classList.add('active');
+
+            // Update symmetric cell
+            const symmetricInput = document.querySelector(`.weight-input[data-row="${c}"][data-col="${r}"]`);
+            if (symmetricInput) {
+              symmetricInput.value = val;
+              symmetricInput.parentElement.classList.add('active');
+            }
+          } else {
+            matrixData[r][c] = 0;
+            matrixData[c][r] = 0; // For undirected graph
+            weightMatrix[r][c] = 0;
+            weightMatrix[c][r] = 0; // For undirected graph
+
+            this.parentElement.classList.remove('active');
+
+            // Update symmetric cell
+            const symmetricInput = document.querySelector(`.weight-input[data-row="${c}"][data-col="${r}"]`);
+            if (symmetricInput) {
+              symmetricInput.value = 0;
+              symmetricInput.parentElement.classList.remove('active');
+            }
+          }
+        });
+
+        cellContainer.appendChild(input);
+        td.appendChild(cellContainer);
+        row.appendChild(td);
+      }
+
+      table.appendChild(row);
+    }
+
+    matrixContainer.appendChild(table);
   }
 
   // Load Example Graph
   function loadExample() {
-    matrixSize = 5;
+    matrixSize = 6;
+    representation = 'weighted';
     matrixSizeInput.value = matrixSize;
-    
+    graphRepresentationSelect.value = representation;
+
     // Create the matrix UI first
     createMatrixInput();
-    
-    // Example weight matrix for a connected graph
+
+    // Example weighted graph
     const exampleWeights = [
-      [0, 2, 0, 6, 1],
-      [2, 0, 3, 0, 4],
-      [0, 3, 0, 5, 7],
-      [6, 0, 5, 0, 8],
-      [1, 4, 7, 8, 0]
+      [0, 3, 0, 0, 6, 5],
+      [3, 0, 1, 0, 0, 4],
+      [0, 1, 0, 6, 0, 4],
+      [0, 0, 6, 0, 8, 5],
+      [6, 0, 0, 8, 0, 2],
+      [5, 4, 4, 5, 2, 0]
     ];
-    
+
     // Update the UI and data
     for (let i = 0; i < matrixSize; i++) {
       for (let j = 0; j < matrixSize; j++) {
         if (exampleWeights[i][j] > 0) {
+          matrixData[i][j] = 1;
           weightMatrix[i][j] = exampleWeights[i][j];
-          const cell = document.querySelector(`.matrix-cell[data-row="${i}"][data-col="${j}"]`);
-          if (cell) {
-            cell.textContent = exampleWeights[i][j];
-            cell.classList.add('active');
+
+          // Update UI based on representation
+          if (representation === 'adjacency') {
+            const cell = document.querySelector(`.matrix-cell[data-row="${i}"][data-col="${j}"]`);
+            if (cell) {
+              cell.textContent = exampleWeights[i][j];
+              cell.classList.add('active');
+            }
+          } else if (representation === 'weighted') {
+            const input = document.querySelector(`.weight-input[data-row="${i}"][data-col="${j}"]`);
+            if (input) {
+              input.value = exampleWeights[i][j];
+              input.parentElement.classList.add('active');
+            }
           }
         }
       }
@@ -202,200 +307,240 @@ document.addEventListener('DOMContentLoaded', function() {
   // Reset Matrix
   function resetMatrix() {
     matrixContainer.innerHTML = '';
+    matrixData = [];
     weightMatrix = [];
     createMatrixInput();
   }
 
-  // Build adjacency matrix from weight matrix
-  function buildAdjacencyMatrix() {
-    const adjacencyMatrix = Array(matrixSize).fill().map(() => Array(matrixSize).fill(0));
-    
-    for (let i = 0; i < matrixSize; i++) {
-      for (let j = 0; j < matrixSize; j++) {
-        if (weightMatrix[i][j] > 0) {
-          adjacencyMatrix[i][j] = 1;
-        }
-      }
-    }
-    
-    return adjacencyMatrix;
-  }
-
-  // Perform MST Algorithm
-  function performMST() {
+  // Find Minimum Spanning Tree
+  function findMST() {
     initGraph();
-    
-    // Convert weight matrix to adjacency matrix for the graph
-    const adjacencyMatrix = buildAdjacencyMatrix();
-    graph.loadFromAdjacencyMatrix(adjacencyMatrix);
-    
-    // Initialize MST state based on selected algorithm
-    mstState.algorithm = mstAlgorithmSelect.value;
-    initMstState();
-    
-    graph.draw();
-    drawWeightedGraph();
-    
+    graph.loadFromAdjacencyMatrix(matrixData);
+
+    // Check if graph is connected before proceeding
+    const components = graph.findConnectedComponents();
+    if (components.length > 1) {
+      alert('Граф не связный. Невозможно построить MST.');
+      return;
+    }
+
+    // Show results container
     resultsContainer.classList.remove('hidden');
+
+    // Draw the initial graph with weights
+    drawGraphWithWeights();
+
+    // Reset MST state
+    resetMstState();
+
+    // Scroll to results
     resultsContainer.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // Initialize MST state
-  function initMstState() {
-    mstState = {
-      step: 0,
-      visitedVertices: [0], // Start with vertex 1
-      mstEdges: [],
-      totalWeight: 0,
-      currentEdge: null,
-      isRunning: false,
-      candidateEdges: [],
-      algorithm: mstState.algorithm
-    };
-    
-    updateMstUI();
-    
-    // Get all edges connected to the starting vertex
-    updateCandidateEdges();
-  }
+  // Draw graph with weight labels
+  function drawGraphWithWeights() {
+    graph.draw();
 
-  // Update candidate edges based on current visited vertices
-  function updateCandidateEdges() {
-    mstState.candidateEdges = [];
-    
-    // Find all edges that connect visited vertices to unvisited ones
-    for (let i of mstState.visitedVertices) {
-      for (let j = 0; j < matrixSize; j++) {
-        if (!mstState.visitedVertices.includes(j) && weightMatrix[i][j] > 0) {
-          mstState.candidateEdges.push({
-            from: i,
-            to: j,
-            weight: weightMatrix[i][j]
-          });
-        }
-      }
-    }
-    
-    // Sort candidate edges by weight
-    mstState.candidateEdges.sort((a, b) => a.weight - b.weight);
-  }
-
-  // Update the MST UI elements
-  function updateMstUI() {
-    currentStepEl.textContent = mstState.step;
-    totalWeightEl.textContent = mstState.totalWeight;
-    
-    if (mstState.currentEdge) {
-      currentEdgeEl.textContent = `${mstState.currentEdge.from + 1} → ${mstState.currentEdge.to + 1} (вес: ${mstState.currentEdge.weight})`;
-    } else {
-      currentEdgeEl.textContent = '-';
-    }
-    
-    // Update MST edges display
-    if (mstState.mstEdges.length > 0) {
-      mstEdgesEl.innerHTML = '';
-      
-      for (const edge of mstState.mstEdges) {
-        const edgeItem = document.createElement('div');
-        edgeItem.className = 'mst-edge-item';
-        
-        const verticesSpan = document.createElement('span');
-        verticesSpan.className = 'edge-vertices';
-        verticesSpan.textContent = `${edge.from + 1} → ${edge.to + 1}`;
-        
-        const weightSpan = document.createElement('span');
-        weightSpan.className = 'edge-weight';
-        weightSpan.textContent = `Вес: ${edge.weight}`;
-        
-        edgeItem.appendChild(verticesSpan);
-        edgeItem.appendChild(weightSpan);
-        mstEdgesEl.appendChild(edgeItem);
-      }
-    } else {
-      mstEdgesEl.innerHTML = '<span>-</span>';
-    }
-  }
-
-  // Draw weighted graph
-  function drawWeightedGraph() {
+    // Add weight labels to edges
     const ctx = graph.ctx;
-    ctx.clearRect(0, 0, graph.canvas.width, graph.canvas.height);
-    
-    // Draw edges with weights
+
     for (let i = 0; i < matrixSize; i++) {
       for (let j = i + 1; j < matrixSize; j++) {
-        if (weightMatrix[i][j] > 0) {
-          let edgeColor = graph.colors.edge;
-          
-          // Check if this edge is in MST
-          const inMST = mstState.mstEdges.some(
-            edge => (edge.from === i && edge.to === j) || (edge.from === j && edge.to === i)
-          );
-          
-          if (inMST) {
-            edgeColor = '#a3e635'; // MST edge color
-          }
-          
-          // Check if this is the current edge
-          const isCurrent = mstState.currentEdge && 
-            ((mstState.currentEdge.from === i && mstState.currentEdge.to === j) || 
-             (mstState.currentEdge.from === j && mstState.currentEdge.to === i));
-          
-          if (isCurrent) {
-            edgeColor = '#f59e0b'; // Current edge color
-          }
-          
-          graph.drawWeightedEdge(i, j, weightMatrix[i][j], edgeColor);
+        if (matrixData[i][j] === 1) {
+          const fromPos = graph.nodePositions[i];
+          const toPos = graph.nodePositions[j];
+
+          // Calculate midpoint for weight label
+          const midX = (fromPos.x + toPos.x) / 2;
+          const midY = (fromPos.y + toPos.y) / 2;
+
+          // Draw weight label with background
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(midX, midY, 12, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.strokeStyle = '#ccc';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Draw weight text
+          ctx.fillStyle = '#1e293b';
+          ctx.font = 'bold 12px Ubuntu Mono, monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(weightMatrix[i][j], midX, midY);
         }
       }
     }
-    
-    // Draw nodes
+  }
+
+  // Reset MST state
+  function resetMstState() {
+    clearInterval(mstInterval);
+
+    mstState = {
+      inTree: [0],             // Start with the first vertex
+      minEdges: Array(matrixSize).fill(Infinity),
+      parent: Array(matrixSize).fill(-1),
+      currentVertex: 0,
+      mstEdges: [],
+      totalWeight: 0,
+      step: 0,
+      isRunning: false,
+      complete: false
+    };
+
+    // Initialize minEdges with weights from first vertex
     for (let i = 0; i < matrixSize; i++) {
-      let nodeColor = graph.colors.node;
-      
-      if (mstState.visitedVertices.includes(i)) {
-        nodeColor = '#10b981'; // Visited vertex color
+      if (matrixData[0][i] === 1) {
+        mstState.minEdges[i] = weightMatrix[0][i];
+        mstState.parent[i] = 0;
       }
-      
+    }
+
+    // Update UI
+    currentStepEl.textContent = '0';
+    currentVertexEl.textContent = '1'; // 1-indexed
+    totalWeightEl.textContent = '0';
+    mstEdgesList.innerHTML = '<li>Построение начинается с вершины 1</li>';
+
+    // Draw initial state
+    drawMstState();
+  }
+
+  // Draw current MST state
+  function drawMstState() {
+    const ctx = graph.ctx;
+    ctx.clearRect(0, 0, graph.canvas.width, graph.canvas.height);
+
+    // Draw all edges with weights first
+    for (let i = 0; i < matrixSize; i++) {
+      for (let j = i + 1; j < matrixSize; j++) {
+        if (matrixData[i][j] === 1) {
+          // Check if this edge is in MST
+          const isInMST = mstState.mstEdges.some(
+            edge => (edge.from === i && edge.to === j) || (edge.from === j && edge.to === i)
+          );
+
+          // Draw edge with appropriate color
+          const color = isInMST ? '#a3e635' : graph.colors.edge;
+          graph.drawEdge(i, j, color);
+
+          // Draw weight label
+          const fromPos = graph.nodePositions[i];
+          const toPos = graph.nodePositions[j];
+          const midX = (fromPos.x + toPos.x) / 2;
+          const midY = (fromPos.y + toPos.y) / 2;
+
+          // Draw weight label with background
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(midX, midY, 12, 0, 2 * Math.PI);
+          ctx.fill();
+          ctx.strokeStyle = '#ccc';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          // Draw weight text
+          ctx.fillStyle = '#1e293b';
+          ctx.font = 'bold 12px Ubuntu Mono, monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(weightMatrix[i][j], midX, midY);
+        }
+      }
+    }
+
+    // Draw vertices with appropriate colors
+    for (let i = 0; i < matrixSize; i++) {
+      let nodeColor = graph.colors.node; // Default blue
+
+      if (i === mstState.currentVertex) {
+        nodeColor = '#f97316'; // Current vertex (orange)
+      } else if (mstState.inTree.includes(i)) {
+        nodeColor = '#10b981'; // In MST (green)
+      }
+
       graph.drawNode(i, nodeColor);
     }
   }
 
-  // Perform one step of Prim's MST algorithm
+  // Perform one step of Prim's algorithm
   function stepMST() {
-    if (mstState.visitedVertices.length === matrixSize) {
-      stopMST();
-      return false; // Algorithm complete
-    }
-    
-    mstState.step++;
-    
-    // If there are no candidate edges, the graph is disconnected
-    if (mstState.candidateEdges.length === 0) {
-      alert('Граф несвязный! Невозможно построить MST.');
-      stopMST();
+    if (mstState.complete) {
       return false;
     }
-    
-    // Get the minimum weight edge from candidates
-    const minEdge = mstState.candidateEdges[0];
-    mstState.currentEdge = minEdge;
-    
+
+    mstState.step++;
+    currentStepEl.textContent = mstState.step;
+
+    // Find vertex with minimum edge weight that's not in the tree
+    let minVertex = -1;
+    let minWeight = Infinity;
+
+    for (let i = 0; i < matrixSize; i++) {
+      if (!mstState.inTree.includes(i) && mstState.minEdges[i] < minWeight) {
+        minVertex = i;
+        minWeight = mstState.minEdges[i];
+      }
+    }
+
+    if (minVertex === -1) {
+      // MST is complete
+      mstState.complete = true;
+      mstState.currentVertex = null;
+      currentVertexEl.textContent = 'Завершено';
+
+      // Add final summary to the edges list
+      mstEdgesList.innerHTML += `
+                <li class="summary">
+                    <span>Итоговый вес MST:</span>
+                    <span class="edge-weight">${mstState.totalWeight}</span>
+                </li>`;
+
+      drawMstState();
+      return false;
+    }
+
+    // Add the new vertex to the tree
+    mstState.inTree.push(minVertex);
+    mstState.currentVertex = minVertex;
+    currentVertexEl.textContent = minVertex + 1; // 1-indexed
+
     // Add the edge to MST
-    mstState.mstEdges.push(minEdge);
-    mstState.totalWeight += minEdge.weight;
-    
-    // Add the new vertex to visited set
-    mstState.visitedVertices.push(minEdge.to);
-    
-    // Update candidate edges
-    updateCandidateEdges();
-    
-    // Update UI
-    updateMstUI();
-    drawWeightedGraph();
-    
+    const parentVertex = mstState.parent[minVertex];
+    const edgeWeight = weightMatrix[parentVertex][minVertex];
+    mstState.totalWeight += edgeWeight;
+    totalWeightEl.textContent = mstState.totalWeight;
+
+    // Update the edges list
+    const edgeEntry = document.createElement('li');
+    edgeEntry.innerHTML = `
+            <span>Добавлено ребро: ${parentVertex + 1} → ${minVertex + 1}</span>
+            <span class="edge-weight">Вес: ${edgeWeight}</span>
+        `;
+    mstEdgesList.appendChild(edgeEntry);
+
+    // Store the MST edge
+    mstState.mstEdges.push({
+      from: parentVertex,
+      to: minVertex,
+      weight: edgeWeight
+    });
+
+    // Update min edges for all vertices not in tree
+    for (let i = 0; i < matrixSize; i++) {
+      if (!mstState.inTree.includes(i) && matrixData[minVertex][i] === 1) {
+        const weight = weightMatrix[minVertex][i];
+        if (weight < mstState.minEdges[i]) {
+          mstState.minEdges[i] = weight;
+          mstState.parent[i] = minVertex;
+        }
+      }
+    }
+
+    // Draw the updated state
+    drawMstState();
     return true;
   }
 
@@ -405,12 +550,12 @@ document.addEventListener('DOMContentLoaded', function() {
       stopMST();
       return;
     }
-    
+
     mstState.isRunning = true;
     startMstBtn.textContent = 'Пауза';
-    
+
     const interval = 1100 - (animationSpeed * 100);
-    
+
     mstInterval = setInterval(() => {
       if (!stepMST()) {
         stopMST();
@@ -418,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, interval);
   }
 
-  // Stop MST algorithm
+  // Stop MST animation
   function stopMST() {
     clearInterval(mstInterval);
     mstState.isRunning = false;
@@ -426,27 +571,24 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Event Listeners
-  generateMatrixBtn.addEventListener('click', function() {
+  generateMatrixBtn.addEventListener('click', function () {
     matrixSize = parseInt(matrixSizeInput.value);
+    representation = graphRepresentationSelect.value;
     createMatrixInput();
   });
 
   resetMatrixBtn.addEventListener('click', resetMatrix);
   loadExampleBtn.addEventListener('click', loadExample);
-  performMstBtn.addEventListener('click', performMST);
+  findMstBtn.addEventListener('click', findMST);
 
   startMstBtn.addEventListener('click', startMST);
-  stepMstBtn.addEventListener('click', function() {
+  stepMstBtn.addEventListener('click', function () {
     stopMST();
     stepMST();
   });
-  restartMstBtn.addEventListener('click', function() {
-    stopMST();
-    initMstState();
-    drawWeightedGraph();
-  });
+  restartMstBtn.addEventListener('click', resetMstState);
 
-  animationSpeedInput.addEventListener('input', function() {
+  animationSpeedInput.addEventListener('input', function () {
     animationSpeed = parseInt(this.value);
     if (mstState.isRunning) {
       stopMST();
@@ -456,6 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initialize
   matrixSize = parseInt(matrixSizeInput.value);
+  representation = graphRepresentationSelect.value;
   initGraph();
-  createMatrixInput();
 });
