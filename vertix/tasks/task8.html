@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertix - Алгоритм кратчайшего пути</title>
+    <link rel="stylesheet" href="/vertix/css/style.css">
+    <link rel="stylesheet" href="/vertix/css/graph.css">
+    <link rel="stylesheet" href="/vertix/css/task8.css">
+</head>
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/vertix/index.html" class="logo"><span>Vertix</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="graph-background"></div>
+            <div class="container">
+                <h1>Алгоритм кратчайшего пути</h1>
+                <p>Задача 8: Реализация алгоритма нахождения кратчайших путей от заданной вершины до остальных вершин графа.</p>
+            </div>
+        </section>
+
+        <section class="task-content">
+            <div class="container">
+                <div class="matrix-input-container">
+                    <div class="input-controls">
+                        <div class="input-group">
+                            <label for="matrix-size">Размер графа:</label>
+                            <input type="number" id="matrix-size" min="1" max="20" value="5">
+                        </div>
+                        <div class="input-group">
+                            <label for="graph-representation">Способ задания:</label>
+                            <select id="graph-representation">
+                                <option value="adjacency">Матрица смежности</option>
+                                <option value="incidence">Матрица инцидентности</option>
+                                <option value="lists">Списки смежности</option>
+                            </select>
+                        </div>
+                        <button id="generate-matrix" class="btn primary">Создать</button>
+                    </div>
+
+                    <div id="matrix-container" class="matrix-container">
+                        <p class="hint">Выберите размер и способ задания графа, затем нажмите "Создать"</p>
+                    </div>
+
+                    <div class="weights-controls">
+                        <div class="input-group">
+                            <label for="enable-weights">Использовать веса:</label>
+                            <input type="checkbox" id="enable-weights" checked>
+                        </div>
+                        <div class="input-group">
+                            <label for="default-weight">Вес по умолчанию:</label>
+                            <input type="number" id="default-weight" min="1" max="100" value="1">
+                        </div>
+                    </div>
+
+                    <div class="matrix-actions">
+                        <button id="calculate-paths" class="btn primary" disabled>Найти кратчайшие пути</button>
+                        <button id="reset-matrix" class="btn secondary" disabled>Сбросить</button>
+                        <button id="load-example" class="btn secondary">Загрузить пример</button>
+                    </div>
+                </div>
+
+                <div class="results-container hidden" id="results-container">
+                    <h2>Поиск кратчайших путей</h2>
+
+                    <div class="graph-container">
+                        <canvas id="graph-canvas" class="graph-canvas" width="500" height="400"></canvas>
+                    </div>
+
+                    <div class="traversal-info">
+                        <div class="traversal-controls">
+                            <button id="start-algorithm" class="btn primary">Начать анимацию</button>
+                            <button id="step-algorithm" class="btn secondary">Следующий шаг</button>
+                            <button id="restart-algorithm" class="btn secondary">Сбросить</button>
+                            <div class="speed-control">
+                                <label for="animation-speed">Скорость:</label>
+                                <input type="range" id="animation-speed" min="1" max="10" value="5">
+                            </div>
+                        </div>
+
+                        <div class="traversal-status">
+                            <div class="status-item">
+                                <span class="label">Текущий шаг:</span>
+                                <span id="current-step" class="value">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Текущая вершина:</span>
+                                <span id="current-vertex" class="value">-</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Исследовано:</span>
+                                <span id="vertices-processed" class="value">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shortest-paths-result">
+                        <h3>Результаты</h3>
+                        <div class="paths-table-container">
+                            <table id="shortest-paths-table" class="paths-table">
+                                <thead>
+                                    <tr>
+                                        <th>Вершина</th>
+                                        <th>Расстояние</th>
+                                        <th>Путь</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- JS will populate this -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="traversal-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #3b82f6;"></div>
+                            <span>Не обработанная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #f97316;"></div>
+                            <span>Текущая вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #10b981;"></div>
+                            <span>Обработанная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #f59e0b;"></div>
+                            <span>Рассматриваемое ребро</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #8b5cf6;"></div>
+                            <span>Кратчайший путь</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-container">
+                    <h3>Об алгоритме нахождения кратчайших путей</h3>
+                    <p>Алгоритм Дейкстры — это алгоритм поиска кратчайшего пути от одной вершины графа до всех остальных. 
+                    Алгоритм работает только для графов с неотрицательными весами рёбер.</p>
+
+                    <h4>Основные шаги алгоритма:</h4>
+                    <ol>
+                        <li>Инициализация: расстояние до начальной вершины = 0, до всех остальных = бесконечность</li>
+                        <li>Отметить все вершины как непосещённые. Создать множество непосещённых вершин</li>
+                        <li>Для текущей вершины рассмотреть все соседние вершины</li>
+                        <li>Для каждого соседа вычислить новое расстояние через текущую вершину</li>
+                        <li>Если новое расстояние меньше, чем ранее сохранённое, обновить его</li>
+                        <li>Отметить текущую вершину как посещённую</li>
+                        <li>Выбрать непосещённую вершину с наименьшим расстоянием и повторить с шага 3</li>
+                    </ol>
+
+                    <h4>Применения алгоритма:</h4>
+                    <ul>
+                        <li>GPS-навигация и системы маршрутизации</li>
+                        <li>Маршрутизация в компьютерных сетях</li>
+                        <li>Транспортная логистика</li>
+                        <li>Решение задач оптимизации в различных областях</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Vertix - это учебный проект, разработанный для изучения теории графов.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/vertix/js/script.js"></script>
+    <script type="module" src="/vertix/js/graph.js"></script>
+    <script type="module" src="/vertix/js/task8.js"></script>
+</body>
+</html>
