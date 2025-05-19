@@ -1,4 +1,7 @@
-export default class Graph {
+/**
+ * Класс Graph
+ */
+class Graph {
     /**
  * Creates an instance of Graph.
  *
@@ -61,33 +64,12 @@ export default class Graph {
         const adjMatrix = this.createAdjacencyMatrix(vertices);
 
         for (let e = 0; e < incMatrix[0].length; e++) {
-            const startVertices = [];
-            const endVertices = [];
-            
-            for (let v = 0; v < vertices; v++) {
-                if (incMatrix[v][e] === -1) {
-                    startVertices.push(v);
-                } else if (incMatrix[v][e] === 1) {
-                    endVertices.push(v);
-                }
-            }
-            
-            // Если это правильное ребро с начальной и конечной вершинами
-            if (startVertices.length === 1 && endVertices.length === 1) {
-                const start = startVertices[0];
-                const end = endVertices[0];
-                adjMatrix[start][end] = 1;
-                adjMatrix[end][start] = 1; // Для неориентированного графа
-            }
-            
-            // Если это просто неориентированное ребро (оба значения 1)
             const connectedVertices = [];
             for (let v = 0; v < vertices; v++) {
-                if (Math.abs(incMatrix[v][e]) === 1) {
+                if (incMatrix[v][e] === 1) {
                     connectedVertices.push(v);
                 }
             }
-            
             if (connectedVertices.length === 2) {
                 const [v1, v2] = connectedVertices;
                 adjMatrix[v1][v2] = 1;
@@ -483,3 +465,5 @@ export default class Graph {
         }
     }
 }
+
+export default Graph;

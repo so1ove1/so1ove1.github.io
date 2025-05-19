@@ -85,12 +85,7 @@
 }
 
 .matrix-cell.active {
-    background-color: rgba(0, 98, 255, 0.453);
-}
-
-.matrix-cell.active-negative {
-    background-color: #4eff749e;
-    color: rgb(0, 0, 0);
+    background-color: rgba(59, 130, 246, 0.2);
 }
 
 .matrix-actions {

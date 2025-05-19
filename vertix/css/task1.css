@@ -1,0 +1,294 @@
+/* Task 1 specific styles */
+
+/* Adjacency lists */
+.adjacency-lists {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.list-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+}
+
+.vertex-label {
+    min-width: 100px;
+    font-weight: bold;
+    color: var(--foreground);
+}
+
+.list-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+}
+
+.checkbox-container label {
+    color: var(--foreground);
+    cursor: pointer;
+    font-family: "Ubuntu Mono", monospace;
+}
+
+
+/* Traversal controls */
+.traversal-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.traversal-controls button {
+    padding: 0.75rem 1.5rem;
+    min-width: 120px;
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.speed-control label {
+    font-size: 1rem;
+    color: var(--foreground);
+}
+
+.speed-control input {
+    width: 100px;
+}
+
+/* Traversal status */
+.traversal-status {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 120px;
+}
+
+.status-item .label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+}
+
+.status-item .value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--foreground);
+}
+
+/* Traversal legend */
+.traversal-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    background-color: var(--background);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid var(--border);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-color {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+}
+
+/* DFS result */
+.dfs-result {
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dfs-result h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--accent);
+    font-size: 1.5rem;
+}
+
+.traversal-sequence {
+    text-align: center;
+    padding: 1rem;
+    background-color: var(--background);
+    border-radius: 6px;
+    font-size: 1.25rem;
+    word-break: break-all;
+}
+
+.traversal-sequence span {
+    font-weight: bold;
+}
+
+/* Info container */
+.info-container {
+    background-color: var(--card);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px var(--shadow);
+    margin-top: 2rem;
+}
+
+.info-container h3 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: var(--accent);
+}
+
+.info-container h4 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--foreground);
+}
+
+.info-container p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.info-container ul, 
+.info-container ol {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0 1rem;
+}
+
+.info-container li {
+    margin-bottom: 0.5rem;
+}
+
+/* Animation for current vertex */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(249, 115, 22, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
+    }
+}
+
+.current-vertex {
+    animation: pulse 1.5s infinite;
+}
+
+/* Animation for edge traversal */
+@keyframes edgeTraversal {
+    0% {
+        stroke-dashoffset: 100;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .traversal-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .traversal-status {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .traversal-legend {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* Node color states */
+.node-unvisited {
+    fill: #3b82f6;
+}
+
+.node-current {
+    fill: #f97316;
+}
+
+.node-visited {
+    fill: #10b981;
+}
+
+/* Edge color states */
+.edge-unvisited {
+    stroke: #1e40af;
+}
+
+.edge-current {
+    stroke: #f59e0b;
+}
+
+.edge-visited {
+    stroke: #a3e635;
+}
+
+/* Start vertex selection */
+.start-vertex-selection {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.start-vertex-selection label {
+    margin-right: 0.5rem;
+}
+
+.start-vertex-selection select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+}

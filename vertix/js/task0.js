@@ -206,28 +206,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const vertex = parseInt(cell.dataset.vertex);
         const edge = parseInt(cell.dataset.edge);
 
-        // Циклически меняем значение ячейки (-1 → 0 → 1 → -1)
+        // Циклически меняем значение ячейки (0 → 1 → 0)
         const currentValue = parseInt(cell.textContent);
-        let newValue;
-        
-        if (currentValue === 0) {
-            newValue = 1;
-        } else if (currentValue === 1) {
-            newValue = -1;
-        } else {
-            newValue = 0;
-        }
+        const newValue = (currentValue + 1) % 2;
 
         currentIncidenceMatrix[vertex][edge] = newValue;
         cell.textContent = newValue;
-        
-        // Обновляем класс для визуального отображения
-        cell.classList.remove('active', 'active-negative');
-        if (newValue === 1) {
-            cell.classList.add('active');
-        } else if (newValue === -1) {
-            cell.classList.add('active-negative');
-        }
+        cell.classList.toggle('active', newValue === 1);
 
         // Конвертируем в матрицу смежности и обновляем граф
         graph.loadFromIncidenceMatrix(currentIncidenceMatrix);
@@ -272,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 currentIncidenceMatrix = graph.createIncidenceMatrix(size);
                 document.querySelectorAll('.matrix-cell.incidence').forEach(cell => {
                     cell.textContent = '0';
-                    cell.classList.remove('active', 'active-negative');
+                    cell.classList.remove('active');
                 });
                 graph.loadFromIncidenceMatrix(currentIncidenceMatrix);
                 break;

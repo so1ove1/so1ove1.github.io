@@ -1,0 +1,282 @@
+/* Task 2 specific styles */
+
+/* Graph generator controls */
+.graph-generator-container {
+  background-color: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.input-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-end;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 150px;
+  flex: 1;
+}
+
+.input-group label {
+  font-size: 1rem;
+  color: var(--foreground);
+}
+
+.input-group input,
+.input-group select {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background-color: var(--background);
+}
+
+/* Graph representation display */
+.graph-representation-container {
+  background-color: var(--background);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.graph-representation-container h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--accent);
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.matrix-display {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  font-family: 'Ubuntu Mono', monospace;
+}
+
+.matrix-display table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.matrix-display td, 
+.matrix-display th {
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  text-align: center;
+  min-width: 40px;
+}
+
+.matrix-display th {
+  background-color: var(--accent);
+  color: white;
+}
+
+.matrix-display tr:nth-child(even) {
+  background-color: rgba(203, 213, 225, 0.2);
+}
+
+/* User sequence input */
+.input-sequence-container {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.input-sequence-container h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.hint {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.user-input-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.user-sequence-input {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+/* Validation result */
+.validation-result {
+  background-color: var(--card);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px var(--shadow);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.validation-result.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.validation-result.correct {
+  border-left: 4px solid #10b981;
+}
+
+.validation-result.incorrect {
+  border-left: 4px solid #ef4444;
+}
+
+.result-content {
+  text-align: center;
+}
+
+.result-content .result-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-content .result-message {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.result-content .result-details {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--background);
+  border-radius: 6px;
+  text-align: left;
+}
+
+.result-content .correct-sequence {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(16, 185, 129, 0.1);
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.sequence-comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.sequence-row {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.sequence-label {
+  min-width: 120px;
+  font-weight: bold;
+}
+
+.sequence-vertices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.vertex-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.vertex-chip.correct {
+  background-color: #10b981;
+  color: white;
+}
+
+.vertex-chip.incorrect {
+  background-color: #ef4444;
+  color: white;
+}
+
+.vertex-chip.expected {
+  background-color: #8b5cf6;
+  color: white;
+}
+
+/* Animation for validation result */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .input-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .user-input-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .user-sequence-input {
+    width: 100%;
+  }
+}
+
+/* Highlight styles for sequence validation */
+.highlight-correct {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.highlight-incorrect {
+  color: #ef4444;
+  font-weight: bold;
+  text-decoration: line-through;
+}
+
+.highlight-expected {
+  color: #8b5cf6;
+  font-weight: bold;
+}
+
+/* Info container margin adjustment */
+.info-container {
+  margin-bottom: 1.5rem;
+}
