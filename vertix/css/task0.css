@@ -29,6 +29,7 @@
 .input-group label {
     font-size: 1rem;
     color: var(--foreground);
+    font-family: "Ubuntu Mono", monospace;
 }
 
 .input-group input {

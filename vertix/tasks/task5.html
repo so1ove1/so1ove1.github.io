@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertix - Компоненты связности графа</title>
+    <link rel="stylesheet" href="/vertix/css/style.css">
+    <link rel="stylesheet" href="/vertix/css/graph.css">
+    <link rel="stylesheet" href="/vertix/css/task0.css">
+    <link rel="stylesheet" href="/vertix/css/task5.css">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/vertix/index.html" class="logo"><span>Vertix</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="graph-background"></div>
+            <div class="container">
+                <h1>Компоненты связности графа</h1>
+                <p>Задача 5: Система предлагает пользователю задать граф матрицей смежности (или матрицей инцидентности
+                    или списками смежности) и затем показывает пользователю число компонент связности.</p>
+            </div>
+        </section>
+
+        <section class="task-content">
+            <div class="container">
+                <div class="matrix-input-container">
+                    <div class="input-controls">
+                        <div class="input-group">
+                            <label for="matrix-size">Размер графа:</label>
+                            <input type="number" id="matrix-size" min="1" max="20" value="5">
+                        </div>
+                        <div class="input-group">
+                            <label for="graph-representation">Способ задания:</label>
+                            <select id="graph-representation">
+                                <option value="adjacency">Матрица смежности</option>
+                                <option value="incidence">Матрица инцидентности</option>
+                                <option value="lists">Списки смежности</option>
+                            </select>
+                        </div>
+                        <button id="generate-matrix" class="btn primary">Создать</button>
+                    </div>
+
+                    <div id="matrix-container" class="matrix-container">
+                        <p class="hint">Выберите размер и способ задания графа, затем нажмите "Создать"</p>
+                    </div>
+
+                    <div class="matrix-actions">
+                        <button id="analyze-graph" class="btn primary" disabled>Найти компоненты связности</button>
+                        <button id="reset-matrix" class="btn secondary" disabled>Сбросить</button>
+                        <button id="load-example" class="btn secondary">Загрузить пример</button>
+                    </div>
+                </div>
+
+                <div class="results-container hidden" id="results-container">
+                    <h2>Компоненты связности графа</h2>
+
+                    <div class="graph-container">
+                        <canvas id="graph-canvas" class="graph-canvas" width="500" height="400"></canvas>
+                    </div>
+
+                    <div class="graph-controls">
+                        <button id="view-default">Обычный вид</button>
+                        <button id="view-components">Компоненты связности</button>
+                    </div>
+
+                    <div id="components-counter" class="components-counter">
+                        <div class="counter-value">
+                            <span id="components-count">0</span>
+                        </div>
+                        <div class="counter-label">Компонент связности</div>
+                    </div>
+
+                    <div id="components-details" class="components-details">
+                        <!-- Здесь будет отображаться информация о компонентах -->
+                    </div>
+
+                    <div class="components-legend" id="components-legend">
+                        <!-- Здесь будет располагаться легенда по цветам компонент -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Vertix - это учебный проект, разработанный для изучения теории графов.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script src="/vertix/js/script.js"></script>
+    <script type="module" src="/vertix/js/task5.js"></script>
+</body>
+
+</html>
