@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vertix - Раскраска графа</title>
+    <link rel="stylesheet" href="/vertix/css/style.css">
+    <link rel="stylesheet" href="/vertix/css/graph.css">
+    <link rel="stylesheet" href="/vertix/css/task12.css">
+    <link rel="stylesheet" href="/vertix/css/task1.css">
+    <link rel="stylesheet" href="/vertix/css/task0.css">
+</head>
+
+<body>
+    <header id="main-header">
+        <div class="container">
+            <a href="/vertix/index.html" class="logo"><span>Vertix</span></a>
+
+            <nav class="desktop-nav">
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+
+            <button id="mobile-menu-toggle">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <line x1="4" x2="20" y1="12" y2="12" />
+                    <line x1="4" x2="20" y1="6" y2="6" />
+                    <line x1="4" x2="20" y1="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden">
+            <nav>
+                <a href="/vertix/index.html">Главная</a>
+                <a href="/vertix/index.html#tasks">Задачи</a>
+                <a href="/vertix/about/about.html">О команде</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div id="graph-background"></div>
+            <div class="container">
+                <h1>Раскраска графа</h1>
+                <p>Задача 12: Реализация алгоритма раскраски графа.</p>
+            </div>
+        </section>
+
+        <section class="task-content">
+            <div class="container">
+                <div class="matrix-input-container">
+                    <div class="input-controls">
+                        <div class="input-group">
+                            <label for="matrix-size">Размер графа:</label>
+                            <input type="number" id="matrix-size" min="3" max="15" value="5">
+                        </div>
+                        <button id="generate-matrix" class="btn primary">Создать</button>
+                    </div>
+
+                    <div id="matrix-container" class="matrix-container">
+                        <p class="hint">Выберите размер графа и нажмите "Создать"</p>
+                    </div>
+
+                    <div class="matrix-actions">
+                        <button id="color-graph" class="btn primary" disabled>Раскрасить</button>
+                        <button id="reset-matrix" class="btn secondary" disabled>Сбросить</button>
+                        <button id="load-example" class="btn secondary">Загрузить пример</button>
+                    </div>
+                </div>
+
+                <div class="results-container hidden" id="results-container">
+                    <h2>Раскраска графа (жадный алгоритм)</h2>
+
+                    <div class="graph-container">
+                        <canvas id="graph-canvas" class="graph-canvas" width="500" height="400"></canvas>
+                    </div>
+
+                    <div class="coloring-info">
+                        <div class="coloring-controls">
+                            <button id="start-coloring" class="btn primary">Начать раскраску</button>
+                            <button id="step-coloring" class="btn secondary">Следующий шаг</button>
+                            <button id="restart-coloring" class="btn secondary">Сбросить</button>
+                            <div class="speed-control">
+                                <label for="animation-speed">Скорость:</label>
+                                <input type="range" id="animation-speed" min="1" max="10" value="5">
+                            </div>
+                        </div>
+
+                        <div class="coloring-status">
+                            <div class="status-item">
+                                <span class="label">Текущий шаг:</span>
+                                <span id="current-step" class="value">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Текущая вершина:</span>
+                                <span id="current-vertex" class="value">-</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="label">Цвет:</span>
+                                <span id="current-color" class="value">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="coloring-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #3b82f6;"></div>
+                            <span>Не раскрашенная вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #f97316;"></div>
+                            <span>Текущая вершина</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #10b981;"></div>
+                            <span>Раскрашенная вершина</span>
+                        </div>
+                    </div>
+
+                    <div id="coloring-result" class="coloring-result">
+                        <h3>Результат раскраски</h3>
+                        <div id="vertex-colors" class="vertex-colors">
+                            <p>Раскраска не начата</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-container">
+                    <h3>О раскраске графа</h3>
+                    <p>Раскраска графа — это присвоение цветов вершинам графа таким образом, чтобы никакие две смежные
+                        вершины не имели одинаковый цвет. Жадный алгоритм раскраски последовательно присваивает каждой
+                        вершине минимально возможный цвет.</p>
+
+                    <h4>Алгоритм раскраски:</h4>
+                    <ol>
+                        <li>Начать с первой вершины и присвоить ей первый цвет</li>
+                        <li>Для каждой следующей вершины:</li>
+                        <li>Рассмотреть цвета всех смежных вершин</li>
+                        <li>Присвоить минимальный доступный цвет, не использованный у соседей</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="about">
+            <p>Vertix - это учебный проект, разработанный для изучения теории графов.</p>
+            <p>Разработчики: Буздыган Мария, Басманов Семён, Соловьёв Даниил</p>
+        </div>
+    </footer>
+
+    <script type="module" src="/vertix/js/script.js"></script>
+    <script type="module" src="/vertix/js/graph.js"></script>
+    <script type="module" src="/vertix/js/task12.js"></script>
+</body>
+
+</html>
